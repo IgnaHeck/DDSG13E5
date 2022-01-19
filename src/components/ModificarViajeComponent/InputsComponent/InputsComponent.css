@@ -1,0 +1,14 @@
+.inputs-container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.select-container{
+    display: flex;
+}
+
+.input-container{
+    display: flex;
+    
+}

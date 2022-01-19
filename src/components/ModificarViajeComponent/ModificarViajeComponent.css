@@ -1,0 +1,36 @@
+.modificar-viaje-container{
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    border: 1px solid pink;
+    width: 100%;
+    height: 100vh;
+    background-color: var(--main-background-color);
+}
+.span-container{
+    display: flex;
+    text-align: left;
+    padding: 1rem;
+}
+
+.segunda-parte{
+    position: relative;
+}
+
+.parrafo{
+    position: absolute;
+    top: 15%;
+    left: 5%;
+}
+
+.parrafo-2{
+    position: absolute;
+    top: 15%;
+    right: 15%;
+}
+
+.input{
+    position: absolute;
+    top: 15%;
+    left: 20%;
+}
