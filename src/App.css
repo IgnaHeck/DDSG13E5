@@ -14,3 +14,14 @@
   width: 100%;
   background-color: rgb(51, 51, 51);
 }
+
+.home-ref{
+  font-size: 2rem;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  border: 0px solid rgba(94, 94, 94, 0.534);
+  background-color: rgba(94, 94, 94, 0.534);
+  color: white;
+  border-radius: 5px;
+  padding: .5rem;
+  margin: 1rem;
+}

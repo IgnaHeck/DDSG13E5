@@ -7,6 +7,8 @@ import ModificarViajeComponent from './components/ModificarViajeComponent/Modifi
 import VerViajeComponent from './components/VerViajeComponent/VerViajeComponent';
 import ListaDeViajesComponent from './components/ListaDeViajesComponent/ListaDeViajesComponent'
 import { ChakraProvider } from '@chakra-ui/react'
+import { Routes, Route} from "react-router-dom";
+import NotFound from './components/NotFound/NotFound';
 
 function App() {
   // JS Code
@@ -15,12 +17,15 @@ function App() {
     // JSX Code
     <ChakraProvider>
       <div className="App">
-        <MenuComponent/>
-        <EliminarPasajeroComponent></EliminarPasajeroComponent>
-        <EliminarViajeComponent></EliminarViajeComponent>
-        <ModificarViajeComponent></ModificarViajeComponent>
-        <VerViajeComponent></VerViajeComponent>
-        <ListaDeViajesComponent></ListaDeViajesComponent>
+        <Routes>
+          <Route path="/*" element={<NotFound/>}/>
+          <Route path="/" element={<MenuComponent/>}/>
+          <Route path="/eliminar-pasajero" element={<EliminarPasajeroComponent/>}/>
+          <Route path="/eliminar-viaje" element={<EliminarViajeComponent/>}/>
+          <Route path="/modificar-viaje" element={<ModificarViajeComponent/>}/>
+          <Route path="/ver-viaje" element={<VerViajeComponent/>}/>
+          <Route path="/viajes" element={<ListaDeViajesComponent/>}/>
+        </Routes>
       </div>
     </ChakraProvider>
   );

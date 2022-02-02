@@ -10,8 +10,8 @@ const EliminarPasajeroComponent = () => {
             <div className='eliminar-pasajero-component-container'>
                 ¿Seguro desea eliminar este pasajero?
                 <Stack spacing={10} direction='row' aling='center'>
-                    <Button className='btn-opcion'>Eliminar</Button>
-                    <Button className='btn-opcion'>Cancelar</Button>
+                    <Button><a href='/'>Eliminar</a></Button>
+                    <Button><a href='/'>Cancelar</a></Button>
                 </Stack>
             </div>
         </>

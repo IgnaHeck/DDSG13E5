@@ -56,6 +56,7 @@ const ModificarViajeComponent = () => {
                     <span className='span-container'>Observaciones:</span>
                     <Textarea className='textarea' placeholder='Escriba Aquí...' />
                 </div>
+                <a className="home-ref" href="/">HOME</a>
             </div>
         </>
     )

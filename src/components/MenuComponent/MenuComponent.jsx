@@ -29,10 +29,10 @@ const columns = [
                 fontWeight='extrabold'
             >'Subi que te llevo'</Text>
                 <Stack spacing={3} direction='row' aling='center'>
-                    <Button>Tus Viajes</Button>
-                    <Button>Programar Viaje</Button>
-                    <Button>Tus Vehiculos</Button>
-                    <Button>Agregar Vehiculo</Button>
+                    <a href="/viajes"><Button>Tus Viajes</Button></a>
+                    <a href="/modificar-viaje"><Button>Programar Viaje</Button></a>
+                    <a href="/vehiculos"><Button>Tus Vehiculos</Button></a>
+                    <a href="/nuevo-vehiculo"><Button>Agregar Vehiculo</Button></a>
                 </Stack>
                 {/* <GrillaComponent columns={columns}></GrillaComponent> */}
             </div>
