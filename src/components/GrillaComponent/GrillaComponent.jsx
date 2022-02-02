@@ -2,46 +2,41 @@ import './GrillaComponent.css';
 import { Table, Thead, Tr, Th, Tbody } from "@chakra-ui/react";
 
 
-const GrillaComponent = () => {
+const GrillaComponent = (props) => {
+    const columns = props.columns;
+    const rows = props.rows;
+    const size = props.size
+
+    const listRows = rows.map((row) =>
+        <Tr>
+            {
+                row.map(e => (
+                    <Th>{e}</Th>
+                ))
+            }
+        </Tr>
+    );
+
+    const listColumns = columns.map((column) => 
+        <Th>{column}</Th>
+    );
 
     return(
         <>
             <div className='grilla-component-container'>
-                <Table colorScheme='facebook' variant='striped'>
+                <Table colorScheme='facebook' variant='striped' size={size}>
                     <Thead>
                         <Tr>
-                            <Th>ID</Th>
-                            <Th>Calle</Th>
-                            <Th>Altura</Th>
-                            <Th>Localidad</Th>
-                            <Th>Provincia</Th>
-                            <Th>Calle</Th>
-                            <Th>Altura</Th>
-                            <Th>Localidad</Th>
-                            <Th>Provincia</Th>
-                            <Th>Conductor</Th>
-                            <Th>Acciones</Th>
+                            {listColumns}
                         </Tr>
                     </Thead>
                     <Tbody>
-                        <Tr>
-                            <Th>1</Th>
-                            <Th>a</Th>
-                            <Th>b</Th>
-                            <Th>c</Th>
-                            <Th>d</Th>
-                            <Th>e</Th>
-                            <Th>f</Th>
-                            <Th>g</Th>
-                            <Th>h</Th>
-                            <Th>i</Th>
-                            <Th><a href='#'>click me!</a></Th>
-                        </Tr>
+                        {listRows}
                     </Tbody>
                 </Table>
             </div>
         </>
     )
-}
+};
 
 export default GrillaComponent;

@@ -5,6 +5,20 @@ import GrillaComponent from '../GrillaComponent/GrillaComponent';
 
 const MenuComponent = () => {
 
+const columns = [
+    'ID',
+    'Calle',
+    'Altura',
+    'Localidad',
+    'Provincia',
+    'Calle',
+    'Altura',
+    'Localidad',
+    'Provincia',
+    'Conductor', 
+    'Acciones'
+];
+
     return(
         <>
             <div className='menu-component-container'>
@@ -13,14 +27,14 @@ const MenuComponent = () => {
                 bgClip='text'
                 fontSize='6xl'
                 fontWeight='extrabold'
-            >"Subi que te llevo"</Text>
+            >'Subi que te llevo'</Text>
                 <Stack spacing={3} direction='row' aling='center'>
                     <Button>Tus Viajes</Button>
                     <Button>Programar Viaje</Button>
                     <Button>Tus Vehiculos</Button>
                     <Button>Agregar Vehiculo</Button>
                 </Stack>
-                <GrillaComponent></GrillaComponent>
+                {/* <GrillaComponent columns={columns}></GrillaComponent> */}
             </div>
         </>
     )
