@@ -45,7 +45,7 @@ const ModificarViajeComponent = () => {
                     <div className='input-precio'>
                         <InputGroup>
                             <InputLeftAddon children='$' />
-                            <Input type='tel' placeholder='Precio' />
+                            <Input type='number' placeholder='Precio' />
                         </InputGroup>
                     </div>
                     <div className='checkbox-container'>
@@ -56,7 +56,7 @@ const ModificarViajeComponent = () => {
                     <span className='span-container'>Observaciones:</span>
                     <Textarea className='textarea' placeholder='Escriba Aquí...' />
                 </div>
-                <a className="home-ref" href="/">HOME</a>
+                <a className="home-ref" href="/">Home</a>
             </div>
         </>
     )

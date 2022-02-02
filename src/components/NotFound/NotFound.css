@@ -1,4 +1,11 @@
+.not-found-container{
+    display: grid;
+    place-items: center;
+    height: 100%;
+}
+
 .title-error{
     font-size: 5rem;
     color: white;
+    padding: 2rem;
 }

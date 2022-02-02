@@ -1,16 +1,59 @@
 .menu-component-container{
     background-color: var(--main-background-color);
-    border: 1px solid red;
     display: flex;
     flex-direction: column;
     position: relative;
     align-items: center;
     width: 100%;
     height: 100vh;
+    padding: 1rem;
 }
 
 .titulo{
     color: white;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 3rem;
+}
+
+.busqueda-container{
+    margin: 1rem;
+    width: 80%;
+}
+
+.etiquetas-container{
+    position: relative;
+    display: flex;
+    width: 90%;
+    height: 5%;
+    border: 1px solid black;
+    margin: 1rem;
+    margin-left: 1rem;
+
+}
+
+.vl{
+    position: absolute;
+    height: 100%;
+    left: 44.7%;
+    border-left: 1px solid black;
+}
+
+.etiqueta1{
+    position: absolute;
+    padding: .5rem;
+    left: 9.5%
+}
+
+.etiqueta2{
+    position: absolute;
+    padding: .5rem;
+    left: 45%;
+}
+
+.menu-btn{
+    font-size: 2rem;
+}
+
+.grilla-container{
+    width: 95%;
 }

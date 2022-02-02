@@ -26,6 +26,7 @@ const VerViajeComponent = () => {
     return(
         <>
             <div className='ver-viaje-container'>
+                <a className="home-ref" href="/viajes"> Volver </a>
                 <a className="home-ref" href="/"> Home </a>
                 <GrillaComponent columns={columns} rows={rows}></GrillaComponent>
             </div>

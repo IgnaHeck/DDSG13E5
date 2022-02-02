@@ -1,5 +1,13 @@
 import './MenuComponent.css'
-import { Button, Stack, Text } from '@chakra-ui/react'
+import { Button, Stack, Text, Input, Menu,
+    MenuButton,
+    MenuList,
+    MenuItem,
+    MenuItemOption,
+    MenuGroup,
+    MenuOptionGroup,
+    MenuDivider,
+    ChevronDownIcon,Portal} from '@chakra-ui/react'
 import GrillaComponent from '../GrillaComponent/GrillaComponent';
 
 
@@ -19,6 +27,8 @@ const columns = [
     'Acciones'
 ];
 
+const rows=[];
+
     return(
         <>
             <div className='menu-component-container'>
@@ -33,8 +43,28 @@ const columns = [
                     <a href="/modificar-viaje"><Button>Programar Viaje</Button></a>
                     <a href="/vehiculos"><Button>Tus Vehiculos</Button></a>
                     <a href="/nuevo-vehiculo"><Button>Agregar Vehiculo</Button></a>
+                    <Menu>
+                        <MenuButton><Button>≡</Button></MenuButton>
+                        <Portal>
+                            <MenuList>
+                                <MenuItem>Tu perfil</MenuItem>
+                                <MenuItem>Registrarse como conductor</MenuItem>
+                                <MenuItem>Log out</MenuItem>
+                            </MenuList>
+                        </Portal>
+                    </Menu>
                 </Stack>
-                {/* <GrillaComponent columns={columns}></GrillaComponent> */}
+                <div className="busqueda-container">
+                    <Input placeholder="Buscar viaje..."></Input>
+                </div>
+                <div className="etiquetas-container">
+                    <p className="etiqueta1">Origen</p>
+                    <div className="vl"></div>
+                    <p className="etiqueta2">Destino</p>
+                </div>
+                <div className="grilla-container">
+                    <GrillaComponent columns={columns} rows={rows}></GrillaComponent>    
+                </div>
             </div>
         </>
     )

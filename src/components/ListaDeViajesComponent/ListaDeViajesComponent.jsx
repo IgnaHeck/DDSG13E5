@@ -27,7 +27,8 @@ const ListaDeViajesComponent = () => {
     return(
         <>
             <div className='lista-viajes-component-container'>
-                <a className="home-ref" href="/">HOME</a>
+                <a className="home-ref" href="/">Home</a>
+                <hr className="hr-line"></hr>
                 <GrillaComponent columns={columns} rows={rows} size='sm'></GrillaComponent>
             </div>
             
