@@ -1,6 +1,7 @@
 import './ListaDeViajesComponent.css'
 import GrillaComponent from '../GrillaComponent/GrillaComponent';
 import MockMenu from '../../assets/MOCK_MENU.json';
+import { Input, Button } from '@chakra-ui/react';
 
 
 const ListaDeViajesComponent = () => {
@@ -27,9 +28,21 @@ const ListaDeViajesComponent = () => {
     return(
         <>
             <div className='lista-viajes-component-container'>
-                <a className="home-ref" href="/">Home</a>
-                <hr className="hr-line"></hr>
-                <GrillaComponent columns={columns} rows={rows} size='sm'></GrillaComponent>
+                <div className="busqueda-container">
+                    <Input placeholder="Buscar viaje..."></Input>
+                    <a className="programar-viaje-mas-button" href="modificar-viaje">+</a>
+                </div>
+                <div className="etiquetas-container">
+                    <p className="etiqueta1">Origen</p>
+                    <div className="vl"></div>
+                    <p className="etiqueta2">Destino</p>
+                </div>
+                <div className="grilla-container">
+                    <GrillaComponent columns={columns} rows={rows} size='sm'></GrillaComponent>
+                </div>
+                <div className='home-ref-button'>
+                    <a className="" href="/"><Button>Home</Button></a>
+                </div>
             </div>
             
         </>

@@ -1,32 +1,44 @@
 import { Button, Modal, ModalOverlay, ModalContent, ModalCloseButton, ModalBody, ModalHeader, ModalFooter} from '@chakra-ui/react';
-import { LoremIpsum } from 'react-lorem-ipsum';
-import { useDisclosure } from "react-use-disclosure";
+import { useState } from 'react';
 import React from 'react';
 
-const ModalComponent = (props) => {
-    const { isOpen, onOpen, onClose } = useDisclosure()
-    const finalRef = React.useRef()
-    const text = props.text
+export default function ModalComponent(props) {
+    const finalRef = React.useRef();
+    const text = props.text;
+    const actionButton = props.actionButton;
+    const modalBody = props.modalBody;
+    const title = props.title;
+    const [isOpen, setOpen] = useState(false);
+
+    const handleOnClick = () => {
+        if(!isOpen) {
+            setOpen(true)
+        } else {
+            setOpen(false)
+        }
+    }
 
      return (
         <>
-        <Button mt={4} onClick={onOpen}>
+        <Button mt={4} onClick={handleOnClick}>
             {text}
         </Button>
-        <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
+        <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={handleOnClick}>
             <ModalOverlay />
             <ModalContent>
-            <ModalHeader>Modal Title</ModalHeader>
+            <ModalHeader>
+                {title}
+            </ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-                <LoremIpsum p={2} />
+               {modalBody}
             </ModalBody>
 
             <ModalFooter>
-                <Button colorScheme='blue' mr={3} onClick={onClose}>
-                Close
+                <Button colorScheme='blue' mr={3} onClick={handleOnClick}>
+                Cerrar
                 </Button>
-                <Button variant='ghost'>Secondary Action</Button>
+                <Button variant='ghost'>{actionButton}</Button>
             </ModalFooter>
             </ModalContent>
         </Modal>
@@ -35,4 +47,3 @@ const ModalComponent = (props) => {
     )
 };
 
-export default ModalComponent;

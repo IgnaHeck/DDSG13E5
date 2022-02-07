@@ -8,6 +8,7 @@ import {
     NumberIncrementStepper,
     NumberDecrementStepper,
     Select,
+    Button,
     Checkbox,
     Input, InputGroup, InputLeftAddon,
     Textarea,
@@ -56,7 +57,10 @@ const ModificarViajeComponent = () => {
                     <span className='span-container'>Observaciones:</span>
                     <Textarea className='textarea' placeholder='Escriba Aquí...' />
                 </div>
-                <a className="home-ref" href="/">Home</a>
+                <div>
+                    <a href="/viajes"> <Button>Volver</Button> </a>
+                    <a href="/"><Button>Home</Button></a>
+                </div>
             </div>
         </>
     )

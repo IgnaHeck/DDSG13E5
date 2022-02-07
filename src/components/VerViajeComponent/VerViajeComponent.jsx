@@ -16,19 +16,31 @@ const VerViajeComponent = () => {
         'Estado',
         'Acciones'
     ];
-    
     const rows = [[]]
+    
+    const aceptarModalBody = "Esta seguro que desea aceptar al pasajero?"
+    const rechazarModalBody = "Esta seguro que desea rechazar al pasajero?"
 
     MockData.forEach((e, index) =>{
-        rows.push([e.DNI, e.apellido, e.nombre, e.edad, e.foto, e.estado, [<ModalComponent text="Aceptar"/>,<ModalComponent text="Rechazar"/>]])
+        rows.push([
+            e.DNI, 
+            e.apellido, 
+            e.nombre, 
+            e.edad, 
+            <img src={e.foto} alt="Profile image"></img>, 
+            e.estado, 
+            [
+                <ModalComponent title="Aceptar?" actionButton="Aceptar pasajero" modalBody={aceptarModalBody} text="Aceptar"/>,
+                <ModalComponent title="Rechazar?" actionButton="Rechazar pasajero" modalBody={rechazarModalBody} text="Rechazar"/>
+            ]])
     })
 
     return(
         <>
             <div className='ver-viaje-container'>
-                <a className="home-ref" href="/viajes"> Volver </a>
-                <a className="home-ref" href="/"> Home </a>
                 <GrillaComponent columns={columns} rows={rows}></GrillaComponent>
+                <a href="/viajes"> <Button>Volver</Button> </a>
+                <a href="/"><Button>Home</Button></a>
             </div>
         </>
     )
