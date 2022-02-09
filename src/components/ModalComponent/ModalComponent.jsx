@@ -35,10 +35,10 @@ export default function ModalComponent(props) {
             </ModalBody>
 
             <ModalFooter>
+                <Button colorScheme='red'>{actionButton}</Button>
                 <Button colorScheme='blue' mr={3} onClick={handleOnClick}>
-                Cerrar
+                    Cancelar
                 </Button>
-                <Button variant='ghost'>{actionButton}</Button>
             </ModalFooter>
             </ModalContent>
         </Modal>

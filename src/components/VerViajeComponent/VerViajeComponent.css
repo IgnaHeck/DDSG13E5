@@ -8,3 +8,35 @@
     padding: 1rem;
     background-color: var(--main-background-color);
 }
+
+.direc-vehiculo{
+    display: flex;
+    flex-direction: row;
+}
+
+.direc-container{
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+}
+
+.vehiculo-container{
+    margin-left: 5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.data-conteiner{
+    display: flex;
+    flex-direction: row;
+}
+
+.header-container{
+    display: flex;
+    flex-direction: row;
+}
+
+.title-container{
+    width: 100%
+}
+

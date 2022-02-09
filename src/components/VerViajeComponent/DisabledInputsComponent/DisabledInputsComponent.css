@@ -1,0 +1,14 @@
+.disabled-inputs-container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.disabled-select-container{
+    display: flex;
+}
+
+.disabled-input-container{
+    display: flex;
+    
+}

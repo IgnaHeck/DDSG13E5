@@ -20,34 +20,34 @@
     width: 80%;
 }
 
-.etiquetas-container{
+.origendestino-container{
     position: relative;
     display: flex;
     width: 90%;
-    height: 40px;
+    min-height: 40px;
     border: 1px solid black;
     margin: 1rem;
-    margin-left: 1rem;
+    margin-left: 5rem;
 
 }
 
-.vl{
+.line{
     position: absolute;
     height: 100%;
-    left: 44.7%;
+    left: 42%;
     border-left: 1px solid black;
 }
 
-.etiqueta1{
+.origin{
     position: absolute;
     padding: .5rem;
-    left: 9.5%
+    left: 1%;
 }
 
-.etiqueta2{
+.destiny{
     position: absolute;
     padding: .5rem;
-    left: 45%;
+    left: 42.3%;
 }
 
 .menu-btn{

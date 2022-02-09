@@ -2,7 +2,21 @@ import './VerViajeComponent.css';
 import GrillaComponent from '../GrillaComponent/GrillaComponent';
 import ModalComponent from '../ModalComponent/ModalComponent';
 import MockData from '../../assets/MOCK_DATA.json';
-import { Button } from '@chakra-ui/react';
+import ColoredLine from '../ColoredLine/ColoredLine';
+import DisabledInputsComponent from './DisabledInputsComponent/DisabledInputsComponent';
+import {
+    NumberInput,
+    NumberInputField,
+    NumberInputStepper,
+    NumberIncrementStepper,
+    NumberDecrementStepper,
+    Select,
+    Button,
+    Checkbox,
+    Input, InputGroup, InputLeftAddon,
+    Textarea,
+    } from '@chakra-ui/react';
+
 import React from 'react';
 
 const VerViajeComponent = () => {
@@ -30,13 +44,84 @@ const VerViajeComponent = () => {
             <img src={e.foto} alt="Profile image"></img>, 
             e.estado, 
             [
-                <ModalComponent title="Aceptar?" actionButton="Aceptar pasajero" modalBody={aceptarModalBody} text="Aceptar"/>,
-                <ModalComponent title="Rechazar?" actionButton="Rechazar pasajero" modalBody={rechazarModalBody} text="Rechazar"/>
+                <ModalComponent title="Aceptar?" actionButton="Aceptar" modalBody={aceptarModalBody} text="Aceptar"/>,
+                <ModalComponent title="Rechazar?" actionButton="Rechazar" modalBody={rechazarModalBody} text="Rechazar"/>
             ]])
     })
 
     return(
         <>
+            <div className='modificar-viaje-container'>
+                <div className='header-container'>
+                    <div className='title-container'>
+                        <span className='span-container'>Viaje {}</span>
+                    </div>
+                    <div clasName='state-container'>
+                        <span className='span-container'>Estado del Viaje:</span>
+                        <Input placeholder='Programado' isDisabled></Input>
+                    </div>
+                </div>
+                <div className='direc-vehiculo'>
+                    <div className='direc-container'>
+                        <span className='span-container'>Origen:</span>
+                        <DisabledInputsComponent/>
+                        <span className='span-container'>Destino:</span>
+                        <DisabledInputsComponent/>
+                    </div>
+                    <div className='vehiculo-container'>
+                        <span className='span-container'>Vehiculo:</span>
+                        <div className='data-conteiner'>
+                            <div>
+                                <span className='span-container'>Patente:</span>
+                                <Input isDisabled></Input>
+                            </div>
+                            <div>
+                                <span className='span-container'>Color:</span>
+                                <Input isDisabled></Input>
+                            </div>
+                        </div>
+                        <div className='data-conteiner'>
+                            <div>
+                                <span className='span-container'>Marca:</span>
+                                <Select isDisabled></Select>
+                            </div>
+                            <div>
+                                <span className='span-container'>Modelo:</span>
+                                <Select isDisabled></Select>
+                            </div>
+                        </div>
+                    </div>                  
+                </div>    
+                <ColoredLine color='gray' height='2px'/>
+                <div className='segunda-parte'>
+                    <p className='parrafo'>Maximo de pasajeros:</p>
+                    <div>
+                    <NumberInput className='input' size='sm' maxW={20} defaultValue={0} min={0} max={4} isDisabled>
+                        <NumberInputField />
+                        <NumberInputStepper>
+                            <NumberIncrementStepper />
+                            <NumberDecrementStepper />
+                        </NumberInputStepper>
+                    </NumberInput>
+                    </div>
+                    <div className='input-precio'>
+                        <InputGroup>
+                            <InputLeftAddon children='$' />
+                            <Input type='number' placeholder='Precio' isDisabled></Input>
+                        </InputGroup>
+                    </div>
+                    <div className='checkbox-container'>
+                        <Checkbox defaultIsChecked isDisabled>Equipaje</Checkbox>
+                    </div>    
+                </div>
+                <div className='textarea-conteiner'>
+                    <span className='span-container'>Observaciones:</span>
+                    <Textarea className='textarea' placeholder='Escriba Aquí...' isDisabled></Textarea>
+                </div>
+            </div>
+            <div className="busqueda-container">
+                <Input placeholder="Buscar Pasajero..."></Input>
+            </div>
             <div className='ver-viaje-container'>
                 <GrillaComponent columns={columns} rows={rows}></GrillaComponent>
                 <a href="/viajes"> <Button>Volver</Button> </a>

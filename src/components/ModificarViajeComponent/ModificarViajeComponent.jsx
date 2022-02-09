@@ -27,7 +27,7 @@ const ModificarViajeComponent = () => {
                 <div className='segunda-parte'>
                     <p className='parrafo-2'>Vehiculo:</p>
                     <div className='slect-container'>
-                        <Select className='select' placeholder='Seleccione un vehiculo'>
+                        <Select className='select' placeholder='Seleccione un vehiculo' bg='white' variant='filled'>
                             <option value='option1'>Corsa</option>
                             <option value='option2'>Corsa 2</option>
                             <option value='option3'>Corsa 3</option>
@@ -35,7 +35,7 @@ const ModificarViajeComponent = () => {
                     </div>
                     <p className='parrafo'>Maximo de pasajeros:</p>
                     <div>
-                    <NumberInput className='input' size='sm' maxW={20} defaultValue={0} min={0} max={4}>
+                    <NumberInput bg='white' className='input' size='sm' maxW={20} defaultValue={0} min={0} max={4}>
                         <NumberInputField />
                         <NumberInputStepper>
                             <NumberIncrementStepper />
@@ -55,12 +55,12 @@ const ModificarViajeComponent = () => {
                 </div>
                 <div className='textarea-conteiner'>
                     <span className='span-container'>Observaciones:</span>
-                    <Textarea className='textarea' placeholder='Escriba Aquí...' />
+                    <Textarea bg='white' className='textarea' placeholder='Escriba Aquí...' />
                 </div>
-                <div>
+                <footer className='footer'>
                     <a href="/viajes"> <Button>Volver</Button> </a>
                     <a href="/"><Button>Home</Button></a>
-                </div>
+                </footer>
             </div>
         </>
     )

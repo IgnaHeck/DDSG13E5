@@ -52,7 +52,10 @@
 } 
 
 .input-precio{
-    padding-top: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+    background-color: white;
 }
 
 .checkbox-container{
@@ -70,4 +73,12 @@
 .textarea{
     max-height: 100%;
     margin-left: .5rem;
+}
+
+.footer{
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    padding: 1rem;
+    padding-right: 3.5rem;
 }
