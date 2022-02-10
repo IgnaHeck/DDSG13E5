@@ -1,28 +1,56 @@
 import './ListaDeViajesComponent.css'
 import GrillaComponent from '../GrillaComponent/GrillaComponent';
-import MockMenu from '../../assets/MOCK_MENU.json';
 import { Input, Button } from '@chakra-ui/react';
-
+import React, { useEffect, useState, useRef } from 'react';
+import useStorage from '../../hooks/useStorage';
 
 const ListaDeViajesComponent = () => {
     const columns = [
         'ID',
-        'Calle',
-        'Altura',
-        'Localidad',
-        'Provincia',
-        'Calle',
-        'Altura',
-        'Localidad',
-        'Provincia',
+        'Calle O.',
+        'Altura O.',
+        'Localidad O.',
+        'Provincia O.',
+        'Calle D.',
+        'Altura D.',
+        'Localidad D.',
+        'Provincia D.',
         'Estado',
         'Acciones'
     ];
 
     const rows = [[]]
 
-    MockMenu.forEach((e, index) =>{
-        rows.push([index, e.calleo, e.alturao, e.localidado, e.provinciao, e.calle, e.altura, e.localidad, e.provincia, e.estado, [<a href="/ver-viaje">Ver-</a>,<a href="/modificar-viaje">Edit-</a>,<a href="/xd">Eliminar</a> ]])
+    const { getViajeByConductorID } = useStorage();
+    const [viajes, setViajes] = useState([]);
+    // const viajeRef = useRef(null);
+
+    useEffect(()=>{
+        const conductorID = 1
+        getViajeByConductorID(conductorID).then((viajes) =>{
+            const viajesArray = []
+            for (let i = 0; i < viajes.length; i++) {
+                viajesArray[i] = viajes[i];
+            }
+            setViajes(viajesArray)
+        })
+    },[])
+
+    viajes.forEach((viaje, index) =>{
+        rows.push([
+            viaje.id, 
+            viaje.DireccionOrigen.calle, 
+            viaje.DireccionOrigen.altura, 
+            viaje.DireccionOrigen.Localidad.nombre, 
+            viaje.DireccionOrigen.Localidad.Provincia.nombre, 
+            viaje.DireccionDestino.calle, 
+            viaje.DireccionDestino.altura, 
+            viaje.DireccionDestino.Localidad.nombre, 
+            viaje.DireccionDestino.Localidad.Provincia.nombre, 
+            viaje.estado, 
+            [<a href="/ver-viaje">Ver-</a>,
+            <a href="/modificar-viaje">Edit-</a>,
+            <a href="/xd">Eliminar</a> ]])
     })
 
     return(

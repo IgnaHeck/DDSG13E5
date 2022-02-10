@@ -17,9 +17,11 @@ import {
     Textarea,
     } from '@chakra-ui/react';
 
-import React from 'react';
+
 
 const VerViajeComponent = () => {
+
+    
 
     const columns = [
         'DNI',
@@ -34,6 +36,8 @@ const VerViajeComponent = () => {
     
     const aceptarModalBody = "Esta seguro que desea aceptar al pasajero?"
     const rechazarModalBody = "Esta seguro que desea rechazar al pasajero?"
+
+   
 
     MockData.forEach((e, index) =>{
         rows.push([
@@ -118,12 +122,14 @@ const VerViajeComponent = () => {
                     <span className='span-container'>Observaciones:</span>
                     <Textarea className='textarea' placeholder='Escriba Aquí...' isDisabled></Textarea>
                 </div>
-            </div>
-            <div className="busqueda-container">
+                <div className="busqueda-container">
                 <Input placeholder="Buscar Pasajero..."></Input>
+                </div>
             </div>
             <div className='ver-viaje-container'>
                 <GrillaComponent columns={columns} rows={rows}></GrillaComponent>
+            </div>
+            <div className="footer">
                 <a href="/viajes"> <Button>Volver</Button> </a>
                 <a href="/"><Button>Home</Button></a>
             </div>

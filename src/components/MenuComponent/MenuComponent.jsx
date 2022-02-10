@@ -8,18 +8,12 @@ import { Button, Stack, Text, Input, Menu,
 import GrillaComponent from '../GrillaComponent/GrillaComponent';
 import MockMenu from '../../assets/MOCK_MENU.json';
 import useStorage from '../../hooks/useStorage'
+import { useEffect, useState } from 'react';
 
 const MenuComponent = () => {
-    const {getMarcas,
-        getModelos,
-        getVehiculo,
-        getConductores,
-        getPasajeros,
-        getPersonas,
-        getProvincias,
-        getLocalidades,
-        getViajes
-    } = useStorage();
+    const { getViajes } = useStorage();
+
+    const [viajes, setViajes ] = useState([]);
 
     const columns = [
         'ID',
@@ -36,16 +30,33 @@ const MenuComponent = () => {
     ];
     const rows = [[]]
 
-    MockMenu.forEach((e, index) =>{
-        rows.push([index, e.calleo, e.alturao, e.localidado, e.provinciao, e.calle, e.altura, e.localidad, e.provincia, e.estado, [<a href="/ver-viaje">Ver Viaje</a>]])
-    })
-
-    const handleOnClick = () => {
-        console.log("click!")
-        getLocalidades("1").then((resp) => {
-            console.log(resp)
+    useEffect(()=>{
+        getViajes().then((viaje) =>{
+            const listaViajes = []
+            for (let i = 0; i < viaje.length; i++) {
+                listaViajes[i] = viaje[i];
+            }
+            setViajes(listaViajes)
         })
-    }
+
+    },[]);
+
+    console.log(viajes)
+
+    viajes.forEach((viaje, index) =>{
+        rows.push([
+            viaje.id, 
+            viaje.DireccionOrigen.calle, 
+            viaje.DireccionOrigen.altura, 
+            viaje.DireccionOrigen.Localidad.nombre, 
+            viaje.DireccionOrigen.Localidad.Provincia.nombre, 
+            viaje.DireccionDestino.calle, 
+            viaje.DireccionDestino.altura, 
+            viaje.DireccionDestino.Localidad.nombre, 
+            viaje.DireccionDestino.Localidad.Provincia.nombre,
+            [viaje.Conductor.Persona.nombre," ",viaje.Conductor.Persona.apellido], 
+            [<p>Ver Viaje</p>]])
+    })
 
     return(
         <>
@@ -61,7 +72,6 @@ const MenuComponent = () => {
                     <a href="/modificar-viaje"><Button>Programar Viaje</Button></a>
                     <a href="/vehiculos"><Button>Tus Vehiculos</Button></a>
                     <a href="/nuevo-vehiculo"><Button>Agregar Vehiculo</Button></a>
-                    <Button onClick={handleOnClick}>DB</Button>
                     <Menu>
                         <MenuButton><Button>≡</Button></MenuButton>
                         <Portal>
