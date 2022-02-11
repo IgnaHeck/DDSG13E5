@@ -2,6 +2,7 @@ import './ListaDeViajesComponent.css'
 import GrillaComponent from '../GrillaComponent/GrillaComponent';
 import { Input, Button } from '@chakra-ui/react';
 import React, { useEffect, useState, useRef } from 'react';
+import ModalComponent from '../ModalComponent/ModalComponent';
 import useStorage from '../../hooks/useStorage';
 
 const ListaDeViajesComponent = () => {
@@ -36,6 +37,8 @@ const ListaDeViajesComponent = () => {
         })
     },[])
 
+    const eliminarModalBody = "Esta seguro que desea eliminar este viaje?"
+
     viajes.forEach((viaje, index) =>{
         rows.push([
             viaje.id, 
@@ -50,14 +53,14 @@ const ListaDeViajesComponent = () => {
             viaje.estado, 
             [<a href="/ver-viaje">Ver-</a>,
             <a href="/modificar-viaje">Edit-</a>,
-            <a href="/xd">Eliminar</a> ]])
+            <ModalComponent title='Eliminar Viaje?' actionButton='Eliminar' modalBody={eliminarModalBody} text='Eliminar'/> ]])
     })
 
     return(
         <>
             <div className='lista-viajes-component-container'>
                 <div className="busqueda-container">
-                    <Input placeholder="Buscar viaje..."></Input>
+                    <Input bg='white' placeholder="Buscar viaje..."></Input>
                     <a className="programar-viaje-mas-button" href="modificar-viaje">+</a>
                 </div>
                 <div className="etiquetas-container">

@@ -5,6 +5,7 @@
     max-width: 100%;
     padding: 1rem;
     background-color: var(--main-background-color);
+    padding-top: 10rem;
 }
 
 .direc-vehiculo{
@@ -47,5 +48,19 @@
 }
 
 .busqueda-container{
-    background-color: snow
+    /*background-color: snow;*/
+    padding-top: 2.5rem;
 }
+
+/*.textarea-container{
+    height: auto;
+    max-height: 200px;
+    margin: .5rem; 
+    padding-right: 1rem;
+}
+
+.textarea1{
+    max-height: 100%;
+    margin-left: .5rem;
+}*/
+

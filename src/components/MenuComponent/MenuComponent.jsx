@@ -55,7 +55,7 @@ const MenuComponent = () => {
             viaje.DireccionDestino.Localidad.nombre, 
             viaje.DireccionDestino.Localidad.Provincia.nombre,
             [viaje.Conductor.Persona.nombre," ",viaje.Conductor.Persona.apellido], 
-            [<p>Ver Viaje</p>]])
+            [<a href="/error">Ver Viaje</a>]])
     })
 
     return(
@@ -84,7 +84,7 @@ const MenuComponent = () => {
                     </Menu>
                 </Stack>
                 <div className="busqueda-container">
-                    <Input placeholder="Buscar viaje..."></Input>
+                    <Input bg='white' placeholder="Buscar viaje..."></Input>
                 </div>
                 <div className="origendestino-container">
                     <p className="origin">Origen</p>

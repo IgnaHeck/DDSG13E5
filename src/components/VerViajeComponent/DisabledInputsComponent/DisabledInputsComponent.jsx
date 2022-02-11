@@ -16,8 +16,8 @@ const DisabledInputsComponent = () => {
                 </Select>
             </div>
             <div className='disabled-input-container'>
-                <Input placeholder='Calle' isDisabled></Input>
-                <Input placeholder='Altura' isDisabled></Input>
+                <Input bg='white' placeholder='Calle' isDisabled></Input>
+                <Input bg='white' placeholder='Altura' isDisabled></Input>
             </div>
         </div>
         </>

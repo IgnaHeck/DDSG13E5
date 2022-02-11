@@ -58,11 +58,11 @@ const VerViajeComponent = () => {
             <div className='modificar-viaje-container'>
                 <div className='header-container'>
                     <div className='title-container'>
-                        <span className='span-container'>Viaje {}</span>
+                        <span className='span-container'>Viaje {aceptarModalBody}</span>
                     </div>
                     <div clasName='state-container'>
                         <span className='span-container'>Estado del Viaje:</span>
-                        <Input placeholder='Programado' isDisabled></Input>
+                        <Input bg='white' placeholder='Programado' isDisabled></Input>
                     </div>
                 </div>
                 <div className='direc-vehiculo'>
@@ -77,21 +77,21 @@ const VerViajeComponent = () => {
                         <div className='data-conteiner'>
                             <div>
                                 <span className='span-container'>Patente:</span>
-                                <Input isDisabled></Input>
+                                <Input bg='white' isDisabled></Input>
                             </div>
                             <div>
                                 <span className='span-container'>Color:</span>
-                                <Input isDisabled></Input>
+                                <Input bg='white' isDisabled></Input>
                             </div>
                         </div>
                         <div className='data-conteiner'>
                             <div>
                                 <span className='span-container'>Marca:</span>
-                                <Select isDisabled></Select>
+                                <Select bg='white' isDisabled></Select>
                             </div>
                             <div>
                                 <span className='span-container'>Modelo:</span>
-                                <Select isDisabled></Select>
+                                <Select bg='white' isDisabled></Select>
                             </div>
                         </div>
                     </div>                  
@@ -100,7 +100,7 @@ const VerViajeComponent = () => {
                 <div className='segunda-parte'>
                     <p className='parrafo'>Maximo de pasajeros:</p>
                     <div>
-                    <NumberInput className='input' size='sm' maxW={20} defaultValue={0} min={0} max={4} isDisabled>
+                    <NumberInput className='input' bg='white' size='sm' maxW={20} defaultValue={0} min={0} max={4} isDisabled>
                         <NumberInputField />
                         <NumberInputStepper>
                             <NumberIncrementStepper />
@@ -120,11 +120,11 @@ const VerViajeComponent = () => {
                 </div>
                 <div className='textarea-conteiner'>
                     <span className='span-container'>Observaciones:</span>
-                    <Textarea className='textarea' placeholder='Escriba Aquí...' isDisabled></Textarea>
+                    <Textarea bg='white' className='textarea' placeholder='Escriba Aquí...' isDisabled></Textarea>
                 </div>
-                <div className="busqueda-container">
-                <Input placeholder="Buscar Pasajero..."></Input>
-                </div>
+            <div className="busqueda-container">
+            <Input bg='white' placeholder="Buscar Pasajero..."></Input>
+            </div>
             </div>
             <div className='ver-viaje-container'>
                 <GrillaComponent columns={columns} rows={rows}></GrillaComponent>

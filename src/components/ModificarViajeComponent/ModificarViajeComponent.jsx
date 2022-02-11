@@ -18,7 +18,7 @@ import {
 
 const ModificarViajeComponent = () => {
     // Storage functions
-    const { getVehiculo, getVehiculos, insertViaje, insertDireccion } = useStorage();
+    const { getVehiculo, getVehiculos, insertViaje, insertDireccion, getDirecciones } = useStorage();
     // Ref declarations
     const provinciaORef = useRef();
     const provinciaDRef = useRef();
@@ -41,20 +41,23 @@ const ModificarViajeComponent = () => {
     const [ vehiculoSelected, setVehiculoSelected ] = useState(null);
     const [ vehiculos, setVehiculos ] = useState([]);
     const [ isChecked, setChecked ] = useState(true);
+    const [ canSave, setCanSave ] = useState(true);
     const [ vehicleCapacity, setCapacity ] = useState(1);
     const [ isDisabled, setDisabled ] = useState(true);
     const [ conductorID, setConductorID ] = useState(null);
-    const [ origenID, setOrigenID ] = useState();
-    const [ destinoID, setDestinoID ] = useState();
+    const [ direcciones, setDirecciones ] = useState([]);
 
     const handleOnClick = () => {
         setClicked(!isClicked);
         setVehiculoSelected(vehiculoRef.current.value);
-        if(vehiculoRef.current.value === ""){
+        if(vehiculoRef.current.value === "" || localidadDRef.current.value === "" || localidadORef.current.value === "" ){
             setCapacity(1);
             setDisabled(true);
         } else {
             setDisabled(false);
+        }
+        if(calleORef.current.value !== '' && alturaORef.current.value !== '' && calleDRef.current.value !== '' && alturaDRef.current.value !== '' && vehiculoRef.current.value !== '' && precioRef.current.value !== ''){
+            setCanSave(false)
         }
     }
 
@@ -73,6 +76,17 @@ const ModificarViajeComponent = () => {
             setConductorID(vehiculoUnico[0].propietarioID)
 
         })   
+    },[isClicked]);
+
+    useEffect(()=>{
+        getDirecciones().then((direccionesA) => {
+            var direccionesArray = [];
+            for (let i = 0; i < direccionesA.length; i++) {
+                direccionesArray[i] = direccionesA[i].id;
+                console.log(direccionesA[i].id)
+            }
+            setDirecciones(direccionesArray.reverse())
+        })
     },[isClicked]);
 
     const optionsVehiculos = []
@@ -103,11 +117,16 @@ const ModificarViajeComponent = () => {
         }
         const observacion = observacionRef.current.value
         
-        insertDireccion(alturaOrigen, calleOrigen, localidadOrigen).then(data => setOrigenID(data[0].id))
-        insertDireccion(alturaDestino, calleDestino, localidadDestino).then(data => setDestinoID(data[0].id))
+        insertDireccion(alturaOrigen, calleOrigen, localidadOrigen)
+        insertDireccion(alturaDestino, calleDestino, localidadDestino)
 
-        console.log(origenID, destinoID)
-
+        var origennID = direcciones[1] + 2
+        var destinnoID = direcciones[0] + 2
+        console.log("Valores: ", origennID, destinnoID)
+        setTimeout(saveFunction, 1000, precioDefinido, observacion, capacidadMaxima, equipaje, origennID, destinnoID, vehiculoID, conductorID)
+    }
+    
+    const saveFunction = (precioDefinido, observacion, capacidadMaxima, equipaje, origenID, destinoID, vehiculoID, conductorID) => {
         insertViaje(precioDefinido, observacion, 'Programado', capacidadMaxima, equipaje, origenID, destinoID, vehiculoID, conductorID)
         formRef.current.reset()
     }
@@ -116,7 +135,7 @@ const ModificarViajeComponent = () => {
         <>
             <form ref={formRef} onSubmit={handleSave} className='modificar-viaje-container'>
                 <span className='span-container'>Origen:</span>
-                <InputsComponent provinciaRef={provinciaORef} localidadRef={localidadORef} calleRef={calleORef} alturaRef={alturaORef}/>
+                <InputsComponent provinciaRef={provinciaORef} localidadRef={localidadORef} calleRef={calleORef} alturaRef={alturaORef} canSave={setCanSave}/>
                 <span className='span-container'>Destino:</span>
                 <InputsComponent provinciaRef={provinciaDRef} localidadRef={localidadDRef} calleRef={calleDRef} alturaRef={alturaDRef}/>
                 <ColoredLine color='gray' height='2px'/>
@@ -140,7 +159,7 @@ const ModificarViajeComponent = () => {
                     <div className='input-precio'>
                         <InputGroup>
                             <InputLeftAddon children='$' />
-                            <Input required={true} ref={precioRef} isDisabled={isDisabled} type='number' placeholder='Precio' />
+                            <Input onChange={handleOnClick} required={true} ref={precioRef} isDisabled={isDisabled} type='number' placeholder='Precio' />
                         </InputGroup>
                     </div>
                     <div className='checkbox-container'>
@@ -152,7 +171,7 @@ const ModificarViajeComponent = () => {
                     <Textarea ref={observacionRef} bg='white' className='textarea' placeholder='Escriba Aquí...' />
                 </div>
                 <div className='footer'>
-                    <Button type="submit" isDisabled={isDisabled}>Guardar</Button>
+                    <Button type="submit" isDisabled={canSave}>Guardar</Button>
                     <a href="/viajes"> <Button>Volver</Button> </a>
                     <a href="/"><Button>Home</Button></a>
                 </div>

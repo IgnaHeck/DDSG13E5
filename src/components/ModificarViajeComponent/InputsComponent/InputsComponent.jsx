@@ -7,9 +7,12 @@ const InputsComponent = (props) => {
     const { getProvincias, getLocalidades } = useStorage();
     const provinciaRef = props.provinciaRef
     const localidadRef = props.localidadRef
+    const canSave = props.canSave
     const calleRef = props.calleRef
     const alturaRef = props.alturaRef
     const [ isDisabled, setDisabled ] = useState(true);
+    const [ isProvinciaSelected, setProvinciaSelectedBoolean ] = useState(true);
+    const [ isLocalidadSelected, setLocalidadSelectedBoolean ] = useState(true);
     const [ provincias, setProvincias ] = useState([]);
     const [ localidades, setLocalidades ] = useState([]);
     const [ isClicked, setClicked ] = useState(false);
@@ -18,12 +21,18 @@ const InputsComponent = (props) => {
     const handleOnClick = () => {
         setClicked(!isClicked);
         setProvinciaSelected(provinciaRef.current.value)
-        if(provinciaRef.current.value !== ""){
-            setDisabled(false)
-        } else {
+        if(provinciaRef.current.value === "" || calleRef.current.value === '' || alturaRef.current.value === ''){
             setDisabled(true)
+        } else {
+            setDisabled(false)
+        }
+        if(provinciaRef.current.value !== ''){
+            setProvinciaSelectedBoolean(false);
+        } else {
+            setProvinciaSelectedBoolean(true);
             localidadRef.current.value = ""
         }
+        
     }
 
     useEffect(()=>{
@@ -41,6 +50,11 @@ const InputsComponent = (props) => {
                 }
                 setLocalidades(localidadesArray)
             })
+            if(localidadRef.current.value !== ''){
+                setLocalidadSelectedBoolean(false);
+            } else {
+                setLocalidadSelectedBoolean(true);
+            }
     },[isClicked]);
 
     const optionsProvincia = []
@@ -63,14 +77,14 @@ const InputsComponent = (props) => {
                     </Select>
                 </div>
                 <div className='select-inner'>
-                    <Select ref={localidadRef} required={true} className='select-bar' bg='white' variant='filled' placeholder='--Localidad--' isDisabled={isDisabled}>
+                    <Select ref={localidadRef} required={true} className='select-bar' bg='white' variant='filled' placeholder='--Localidad--' isDisabled={isProvinciaSelected} onClick={handleOnClick}>
                         { optionsLocalidad }
                     </Select>
                 </div>
             </div>
             <div className='input-container'>
-                <div className='input-inner'><Input required={true} ref={calleRef} type="text" name="street" bg='white' placeholder='Calle' /></div>
-                <div className='input-inner'><Input required={true} ref={alturaRef} type="number" name="number" bg='white' placeholder='Altura' /></div>
+                <div className='input-inner'><Input isDisabled={isLocalidadSelected} required={true} ref={calleRef} type="text" name="street" bg='white' placeholder='Calle' /></div>
+                <div className='input-inner'><Input isDisabled={isLocalidadSelected} required={true} ref={alturaRef} type="number" name="number" bg='white' placeholder='Altura' /></div>
             </div>
         </div>
         </>
