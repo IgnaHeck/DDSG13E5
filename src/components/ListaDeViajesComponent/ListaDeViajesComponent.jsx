@@ -1,11 +1,12 @@
 import './ListaDeViajesComponent.css'
 import GrillaComponent from '../GrillaComponent/GrillaComponent';
 import { Input, Button } from '@chakra-ui/react';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import ModalComponent from '../ModalComponent/ModalComponent';
 import useStorage from '../../hooks/useStorage';
 
 const ListaDeViajesComponent = () => {
+
     const columns = [
         'ID',
         'Calle O.',
@@ -37,6 +38,7 @@ const ListaDeViajesComponent = () => {
         })
     },[])
 
+
     const eliminarModalBody = "Esta seguro que desea eliminar este viaje?"
 
     viajes.forEach((viaje, index) =>{
@@ -51,9 +53,9 @@ const ListaDeViajesComponent = () => {
             viaje.DireccionDestino.Localidad.nombre, 
             viaje.DireccionDestino.Localidad.Provincia.nombre, 
             viaje.estado, 
-            [<a href="/ver-viaje">Ver-</a>,
-            <a href="/modificar-viaje">Edit-</a>,
-            <ModalComponent title='Eliminar Viaje?' actionButton='Eliminar' modalBody={eliminarModalBody} text='Eliminar'/> ]])
+            <div className="acciones-btn"><a href={`/ver-viaje/${viaje.id}`}><Button>Ver</Button></a>
+            <a href="/modificar-viaje"><Button mx={1}>Edit</Button></a>
+            <ModalComponent m={0} display="flex" title='Eliminar Viaje?' actionButton='Eliminar' aceptarButton="red" cancelButton="Cancelar" modalBody={eliminarModalBody} text='Eliminar'/></div>])
     })
 
     return(
@@ -62,11 +64,6 @@ const ListaDeViajesComponent = () => {
                 <div className="busqueda-container">
                     <Input bg='white' placeholder="Buscar viaje..."></Input>
                     <a className="programar-viaje-mas-button" href="modificar-viaje">+</a>
-                </div>
-                <div className="etiquetas-container">
-                    <p className="etiqueta1">Origen</p>
-                    <div className="vl"></div>
-                    <p className="etiqueta2">Destino</p>
                 </div>
                 <div className="grilla-container">
                     <GrillaComponent columns={columns} rows={rows} size='sm'></GrillaComponent>

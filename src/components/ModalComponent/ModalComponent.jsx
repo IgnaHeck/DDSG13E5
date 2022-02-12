@@ -6,8 +6,11 @@ export default function ModalComponent(props) {
     const finalRef = React.useRef();
     const text = props.text;
     const actionButton = props.actionButton;
+    const cancelButton = props.cancelButton
     const modalBody = props.modalBody;
     const title = props.title;
+    const aceptarButtonColor = props.aceptarButton || 'blue'
+    const cancelarButtonColor = props.cancelarButton || 'blue'
     const [isOpen, setOpen] = useState(false);
 
     const handleOnClick = () => {
@@ -20,7 +23,7 @@ export default function ModalComponent(props) {
 
      return (
         <>
-        <Button mt={4} onClick={handleOnClick}>
+        <Button mx={1} mt={0} onClick={handleOnClick}>
             {text}
         </Button>
         <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={handleOnClick}>
@@ -35,14 +38,11 @@ export default function ModalComponent(props) {
             </ModalBody>
 
             <ModalFooter>
-                <Button colorScheme='red'>{actionButton}</Button>
-                <Button colorScheme='blue' mr={3} onClick={handleOnClick}>
-                    Cancelar
-                </Button>
+                <Button colorScheme={aceptarButtonColor}>{actionButton}</Button>
+                <Button colorScheme={cancelarButtonColor} mx={2} onClick={handleOnClick}>{cancelButton}</Button>
             </ModalFooter>
             </ModalContent>
         </Modal>
-
         </>
     )
 };

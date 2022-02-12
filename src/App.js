@@ -23,7 +23,7 @@ function App() {
           <Route path="/eliminar-pasajero" element={<EliminarPasajeroComponent/>}/>
           <Route path="/eliminar-viaje" element={<EliminarViajeComponent/>}/>
           <Route path="/modificar-viaje" element={<ModificarViajeComponent/>}/>
-          <Route path="/ver-viaje" element={<VerViajeComponent/>}/>
+          <Route path="/ver-viaje/:id" element={<VerViajeComponent/>}/>
           <Route path="/viajes" element={<ListaDeViajesComponent/>}/>
         </Routes>
       </div>

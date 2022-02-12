@@ -67,7 +67,50 @@ const useStorage = () => {
     const getViaje = async (id) => {
         const { data } = await supabase
         .from('Viaje')
-        .select('*')
+        .select(`
+            id,
+            precio,
+            observacion,
+            estado,
+            espacioDefinido,
+            equipajePermitido,
+            DireccionOrigen:origenID ( 
+                altura, 
+                calle, 
+                Localidad:localidadID ( 
+                    nombre,
+                    Provincia: provinciaID ( nombre )
+                )
+            ),
+            DireccionDestino:destinoID ( 
+                altura, 
+                calle, 
+                Localidad:localidadID ( 
+                    nombre,
+                    Provincia: provinciaID ( nombre )
+                )
+            ),
+            Vehiculo:vehiculoID (
+                capacidadMaxima,
+                color,
+                equipaje,
+                patente,
+                Modelo:modeloID (
+                    name,
+                    Marca: marcaID ( name )
+                )
+            ),
+            Conductor:conductorID (
+                Persona:personaID ( 
+                    apellido,
+                    nombre,
+                    dni,
+                    edad,
+                    fotografia
+                ),
+                fotoRegistro
+            )`
+            )
         .eq('id', id)
         return data
     }
