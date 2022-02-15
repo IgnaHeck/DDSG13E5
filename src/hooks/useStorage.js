@@ -35,6 +35,31 @@ const useStorage = () => {
         return data
     }
 
+    const getPasajerosXViaje = async (id) => {
+        const { data } = await supabase
+        .from('ViajeXPasajero')
+        .select(`
+            id, 
+            Viaje:viajeID(
+                id
+            ),
+            Pasajero:pasajeroID (
+                id,
+                Persona:personaID (
+                    id,
+                    apellido,
+                    nombre,
+                    dni,
+                    edad,
+                    fotografia
+                )
+            ),
+            estado
+        `)
+        .eq('viajeID', id)
+        return data
+    }
+
     const getPersonas = async () => {
         const { data } = await supabase
         .from('Persona')
@@ -241,6 +266,34 @@ const useStorage = () => {
         ])
         return data
     }
+    
+    const insertPersona = async (apellido, nombre, dni, edad, fotografia) => {
+        const { data } = await supabase
+        .from('Persona')
+        .insert([
+            { apellido: apellido, nombre: nombre, dni: dni, edad: edad, fotografia: fotografia}
+        ])
+        return data
+    }
+
+    const insertPasajero = async(personaID) => {
+        const { data } = await supabase
+        .from('Pasajero')
+        .insert([
+            {personaID: personaID}
+        ])
+        return data
+    }
+
+    const insertPasajeroXViaje = async(viajeID, pasajeroID, estado) => {
+        const { data } = await supabase
+        .from('ViajeXPasajero')
+        .insert([
+            { viajeID: viajeID, pasajeroID: pasajeroID, estado: estado}
+        ])
+        return data
+    } 
+  
 
     return{
         getVehiculos,
@@ -249,6 +302,7 @@ const useStorage = () => {
         getVehiculo,
         getConductores,
         getPasajeros,
+        getPasajerosXViaje,
         getPersonas,
         getDirecciones,
         getProvincias,
@@ -257,7 +311,10 @@ const useStorage = () => {
         getViaje,
         getViajeByConductorID,
         insertDireccion,
-        insertViaje
+        insertViaje,
+        insertPersona,
+        insertPasajero,
+        insertPasajeroXViaje
     };
 }
 

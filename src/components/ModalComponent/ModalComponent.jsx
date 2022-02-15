@@ -5,9 +5,13 @@ import React from 'react';
 export default function ModalComponent(props) {
     const finalRef = React.useRef();
     const text = props.text;
+    const data = props.data;
     const actionButton = props.actionButton;
-    const cancelButton = props.cancelButton
+    const cancelButton = props.cancelButton;
     const modalBody = props.modalBody;
+    const isDisabled = props.isDisabled;
+    const isActionPerformed = props.isActionPerformed;
+    const onActionClick = props.onActionClick;
     const title = props.title;
     const aceptarButtonColor = props.aceptarButton || 'blue'
     const cancelarButtonColor = props.cancelarButton || 'blue'
@@ -21,9 +25,18 @@ export default function ModalComponent(props) {
         }
     }
 
+    const handleOnActionClick = () => {
+        onActionClick(data);
+        if(!isOpen) {
+            setOpen(true)
+        } else {
+            setOpen(false)
+        }
+    }
+
      return (
         <>
-        <Button mx={1} mt={0} onClick={handleOnClick}>
+        <Button isDisabled={isDisabled} mx={1} mt={0} onClick={handleOnClick}>
             {text}
         </Button>
         <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={handleOnClick}>
@@ -38,8 +51,8 @@ export default function ModalComponent(props) {
             </ModalBody>
 
             <ModalFooter>
-                <Button colorScheme={aceptarButtonColor}>{actionButton}</Button>
-                <Button colorScheme={cancelarButtonColor} mx={2} onClick={handleOnClick}>{cancelButton}</Button>
+                <Button isDisabeld={isActionPerformed} colorScheme={aceptarButtonColor} onClick={handleOnActionClick}>{actionButton}</Button>
+                <Button isDisabeld={isActionPerformed} colorScheme={cancelarButtonColor} mx={2} onClick={handleOnClick}>{cancelButton}</Button>
             </ModalFooter>
             </ModalContent>
         </Modal>

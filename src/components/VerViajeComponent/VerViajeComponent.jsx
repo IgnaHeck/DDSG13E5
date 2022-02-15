@@ -41,9 +41,10 @@ const VerViajeComponent = () => {
     const equipajeRef = useRef()
     const observacionesRef = useRef()
     
-    const { getViaje, getProvincias, getLocalidades } = useStorage(); 
+    const { getViaje, getPasajerosXViaje, insertPasajero, insertPersona, insertPasajeroXViaje } = useStorage(); 
     const { id } = useParams();
     const [isChecked, setChecked] = useState(false);
+    const [rows, setRows] = useState([]);
 
     const columns = [
         'DNI',
@@ -54,10 +55,28 @@ const VerViajeComponent = () => {
         'Estado',
         'Acciones'
     ];
-    const rows = [[]]
     
     const aceptarModalBody = "Esta seguro que desea aceptar al pasajero?"
     const rechazarModalBody = "Esta seguro que desea rechazar al pasajero?"
+
+    const aceptarPasajero = (data) => {
+        insertPersona(data.apellido, data.nombre, data.dni, data.edad, data.fotografia)
+        .then((persona) =>{
+            insertPasajero(persona[0].id).then((pasajero) => {
+                insertPasajeroXViaje(id, pasajero[0].id, "Aceptado")
+            })
+        })
+    }
+
+    const rechazarPasajero = (data) => {
+        insertPersona(data.apellido, data.nombre, data.dni, data.edad, data.fotografia)
+        .then((persona) =>{
+            insertPasajero(persona[0].id).then((pasajero) => {
+                insertPasajeroXViaje(id, pasajero[0].id, "Rechazado")
+            })
+        })
+    }
+
 
     useEffect(() =>{
         getViaje(id).then((viaje)=> {
@@ -79,22 +98,83 @@ const VerViajeComponent = () => {
             setChecked((viaje[0].equipajePermitido) ? true : false)
             observacionesRef.current.value = viaje[0].observacion
             })
+        
+
+            
+        getPasajerosXViaje(id).then((pasajeroXViaje) => {
+
+            
+            var rowsArray = []
+            for (let i = 0; i < pasajeroXViaje.length; i++) {
+                rowsArray[i] = [
+                    pasajeroXViaje[i].Pasajero.Persona.dni, 
+                    pasajeroXViaje[i].Pasajero.Persona.apellido, 
+                    pasajeroXViaje[i].Pasajero.Persona.nombre, 
+                    pasajeroXViaje[i].Pasajero.Persona.edad, 
+                    <img src={pasajeroXViaje[i].Pasajero.Persona.fotografia} alt="Profile pic"></img>, 
+                    pasajeroXViaje[i].estado,
+                    [
+                        //NO ES ACA
+                        <ModalComponent 
+                            title="Aceptar?" 
+                            isDisabled={pasajeroXViaje[i].estado === 'Aceptado' ||  pasajeroXViaje[i].estado === 'Rechazado' ? true : false}
+                            actionButton="Aceptar"
+                            aceptarButton="green"
+                            cancelButton="Cancelar"
+                            modalBody={aceptarModalBody} 
+                            text="Aceptar"/>,
+                        <ModalComponent 
+                            title="Rechazar?" 
+                            isDisabled={pasajeroXViaje[i].estado === 'Aceptado' ||  pasajeroXViaje[i].estado === 'Rechazado' ? true : false} 
+                            actionButton="Rechazar"  
+                            aceptarButton="red" 
+                            cancelButton="Cancelar"
+                            modalBody={rechazarModalBody} 
+                            text="Rechazar"/>
+                    ]
+                ]
+                
+            }
+
+            var randomRows = []
+            for (let j = 0; j < 7; j++) {
+                var randomPerson = MockData[Math.floor(Math.random() * MockData.length)]
+               randomRows[j] = [
+                    randomPerson.dni,
+                    randomPerson.apellido,
+                    randomPerson.nombre,
+                    randomPerson.edad,
+                    <img src={randomPerson.fotografia} alt="Profile pic"></img>, 
+                    randomPerson.estado,
+                   [
+                    <ModalComponent 
+                        title="Aceptar?" 
+                        actionButton="Aceptar" 
+                        aceptarButton="green" 
+                        cancelButton="Cancelar"
+                        data={randomPerson}
+                        onActionClick={aceptarPasajero}
+                        modalBody={aceptarModalBody} 
+                        text="Aceptar"/>,
+                    <ModalComponent 
+                        title="Rechazar?" 
+                        actionButton="Rechazar" 
+                        aceptarButton="red" 
+                        cancelButton="Cancelar"
+                        data={randomPerson}
+                        onActionClick={rechazarPasajero}
+                        modalBody={rechazarModalBody} 
+                        text="Rechazar"/>
+                ]                
+            ]
+                
+            }
+            const newArray = rowsArray.concat(randomRows)
+            setRows(newArray)
+        })
+        
     },[])
-
-    MockData.forEach((e, index) =>{
-        rows.push([
-            e.DNI, 
-            e.apellido, 
-            e.nombre, 
-            e.edad, 
-            <img src={e.foto} alt="Profile image"></img>, 
-            e.estado, 
-            [
-                <ModalComponent title="Aceptar?" actionButton="Aceptar" aceptarButton="green" cancelButton="Cancelar" modalBody={aceptarModalBody} text="Aceptar"/>,
-                <ModalComponent title="Rechazar?" actionButton="Rechazar" aceptarButton="red" cancelButton="Cancelar" modalBody={rechazarModalBody} text="Rechazar"/>
-            ]])
-    })
-
+   
     return(
         <>
             <div className='modificar-viaje-container'>
@@ -102,7 +182,7 @@ const VerViajeComponent = () => {
                     <div className='title-container'>
                         <span className='span-container'>Viaje numero: {id}</span>
                     </div>
-                    <div clasName='state-container'>
+                    <div className='state-container'>
                         <span className='span-container'>Estado del Viaje:</span>
                         <Input ref={estadoRef} bg='white' placeholder='Programado' isDisabled></Input>
                     </div>

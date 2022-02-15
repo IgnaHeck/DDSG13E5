@@ -6,6 +6,7 @@ const GrillaComponent = (props) => {
     const columns = props.columns;
     const rows = props.rows;
     const size = props.size
+    
 
     const listRows = rows.map((row) =>
         <Tr>
