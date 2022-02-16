@@ -3,6 +3,7 @@ import GrillaComponent from '../GrillaComponent/GrillaComponent';
 import { Input, Button } from '@chakra-ui/react';
 import React, { useEffect, useState, useRef } from 'react';
 import ModalComponent from '../ModalComponent/ModalComponent';
+import { useParams } from 'react-router-dom';
 import useStorage from '../../hooks/useStorage';
 
 const ListaDeViajesComponent = () => {
@@ -23,10 +24,12 @@ const ListaDeViajesComponent = () => {
 
     // const rows = [[]]
     const inputRef = useRef('');
-    const { getViajeByConductorID } = useStorage();
+    const { getViajeByConductorID, insertDireccion, insertViaje } = useStorage();
     const [viajes, setViajes] = useState([]);
     const [filteredRows, setFilteredRows]= useState([]);
     const [rows, setRows] = useState([]);
+    const [clicked, setClicked] = useState();
+    const { id, data } = useParams();
     // const viajeRef = useRef(null);
 
     useEffect(()=>{
@@ -39,7 +42,10 @@ const ListaDeViajesComponent = () => {
             setViajes(viajesArray)
             cargarViajes(viajesArray)
         })
-        const eliminarModalBody = "Esta seguro que desea eliminar este viaje?"
+
+        const cancelarModalBody = "Esta seguro que desea cancelar este viaje?"
+        const finalizarModalBody = "Este viaje llego a destino?"
+
         var rowsList = []
         const cargarViajes = (viajesArray) => {
             for (let i = 0; i < viajesArray.length; i++) {
@@ -56,7 +62,30 @@ const ListaDeViajesComponent = () => {
                     viajesArray[i].estado, 
                     <div className="acciones-btn"><a href={`/ver-viaje/${viajesArray[i].id}`}><Button>Ver</Button></a>
                         <a href={`/modificar-viaje/${viajesArray[i].id}`}><Button mx={1}>Edit</Button></a>
-                        <ModalComponent m={0} display="flex" title='Eliminar Viaje?' actionButton='Eliminar' aceptarButton="red" cancelButton="Cancelar" modalBody={eliminarModalBody} text='Eliminar'/>
+                        <ModalComponent 
+                            m={0} 
+                            display="flex" 
+                            title='Cancelar Viaje?' 
+                            actionButton='Cancelar' 
+                            aceptarButton="red" 
+                            cancelButton="Cerrar" 
+                            data={viajesArray[i]}
+                            onActionClick={cancelarViaje}
+                            disabledAfterAction={true}
+                            modalBody={cancelarModalBody} 
+                            text='Cancelar'/>
+                        <ModalComponent 
+                            m={0} 
+                            display="flex" 
+                            title='Finalizar Viaje?' 
+                            actionButton='Finalizar' 
+                            aceptarButton="red" 
+                            cancelButton="Cancelar"
+                            data={viajesArray[i]}
+                            onActionClick={finalizarViaje}
+                            disabledAfterAction={true}
+                            modalBody={finalizarModalBody} 
+                            text='Finalizar'/>
                     </div>]
             }
             setRows(rowsList)
@@ -64,7 +93,36 @@ const ListaDeViajesComponent = () => {
         }
     },[])
 
+    const cancelarViaje = (data) => {
+        console.log(data)
+        console.log(data.DireccionOrigen)
+        insertViaje(
+            data.precio,
+            data.observacion,
+            'Cancelado',
+            data.espacioDefinido,
+            data.equipajePermitido,
+            data.DireccionOrigen,
+            data.DireccionDestino,
+            data.Vehiculo,
+            data.Conductor)
+        setClicked(!clicked)
+    }
 
+    const finalizarViaje = (data) =>{
+        console.log(data)
+        insertViaje(
+            data.precio,
+            data.observacion,
+            "Finalizado",
+            data.espacioDefinido,
+            data.equipajePermitido,
+            data.DireccionOrigen,
+            data.DireccionDestino,
+            data.Vehiculo,
+            data.Conductor)
+        setClicked(!clicked)
+    }
 
     const buscarViaje = () => {
         var listaFiltrada = []

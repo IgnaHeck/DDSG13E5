@@ -15,10 +15,11 @@ import {
     Input, InputGroup, InputLeftAddon,
     Textarea,
   } from '@chakra-ui/react';
+//  import { useParams } from 'react-router-dom';
 
 const ModificarViajeComponent = () => {
     // Storage functions
-    const { getVehiculo, getVehiculos, insertViaje, insertDireccion, getDirecciones } = useStorage();
+    const { getVehiculo, getVehiculos, insertViaje, insertDireccion, getDirecciones, /*getViaje*/ } = useStorage();
     // Ref declarations
     const provinciaORef = useRef();
     const provinciaDRef = useRef();
@@ -46,6 +47,8 @@ const ModificarViajeComponent = () => {
     const [ isDisabled, setDisabled ] = useState(true);
     const [ conductorID, setConductorID ] = useState(null);
     const [ direcciones, setDirecciones ] = useState([]);
+
+//    const { id } = useParams();
 
     const handleOnClick = () => {
         setClicked(!isClicked);
@@ -88,6 +91,24 @@ const ModificarViajeComponent = () => {
         })
     },[isClicked]);
 
+/*    useEffect(()=>{
+        getViaje(id).then((viaje)=> {
+            provinciaORef.current[0].text = viaje[0].DireccionOrigen.Localidad.Provincia.nombre
+            provinciaDRef.current[0].text = viaje[0].DireccionDestino.Localidad.Provincia.nombre
+            localidadORef.current[0].text = viaje[0].DireccionOrigen.Localidad.nombre
+            localidadDRef.current[0].text = viaje[0].DireccionDestino.Localidad.nombre
+            calleORef.current.attributes[0].value = viaje[0].DireccionOrigen.calle
+            calleDRef.current.attributes[0].value = viaje[0].DireccionDestino.calle
+            alturaORef.current.attributes[0].value = viaje[0].DireccionOrigen.altura
+            alturaDRef.current.attributes[0].value = viaje[0].DireccionDestino.altura
+            vehiculoRef.current.value = viaje[0].Vehiculo.patente
+            capacidadMaximaRef.current.value = viaje[0].espacioDefinido
+            precioRef.current.value = viaje[0].precio
+            observacionRef.current.value = viaje[0].observacion
+        })
+    },[isClicked]);*/
+    // NO FUNCIONA BIEN (TODO LO REFERENTE A ESTO ESTA COMENTADO)
+
     const optionsVehiculos = []
     for (let i = 0; i < vehiculos.length; i++) {
         optionsVehiculos[i] = <option key={i} value={vehiculos[i].id}>{vehiculos[i].patente}</option>
@@ -120,6 +141,7 @@ const ModificarViajeComponent = () => {
         insertDireccion(alturaDestino, calleDestino, localidadDestino)
 
         var origennID = direcciones[1] + 2
+        console.log(origennID)
         var destinnoID = direcciones[0] + 2
         setTimeout(saveFunction, 1000, precioDefinido, observacion, capacidadMaxima, equipaje, origennID, destinnoID, vehiculoID, conductorID)
     }
