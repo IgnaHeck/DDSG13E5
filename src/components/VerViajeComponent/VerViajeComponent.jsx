@@ -10,7 +10,6 @@ import {
     NumberInputStepper,
     NumberIncrementStepper,
     NumberDecrementStepper,
-    Select,
     Button,
     Checkbox,
     Input, InputGroup, InputLeftAddon,
@@ -45,6 +44,7 @@ const VerViajeComponent = () => {
     const { id } = useParams();
     const [isChecked, setChecked] = useState(false);
     const [rows, setRows] = useState([]);
+    const [clicked, setClicked] = useState()
 
     const columns = [
         'DNI',
@@ -64,6 +64,7 @@ const VerViajeComponent = () => {
         .then((persona) =>{
             insertPasajero(persona[0].id).then((pasajero) => {
                 insertPasajeroXViaje(id, pasajero[0].id, "Aceptado")
+                setClicked(!clicked)
             })
         })
     }
@@ -73,8 +74,44 @@ const VerViajeComponent = () => {
         .then((persona) =>{
             insertPasajero(persona[0].id).then((pasajero) => {
                 insertPasajeroXViaje(id, pasajero[0].id, "Rechazado")
+                setClicked(!clicked)
             })
         })
+    }
+    
+    const randomRows = []
+    for (let j = 0; j < 7; j++) {
+        var randomPerson = MockData[Math.floor(Math.random() * MockData.length)]
+        randomRows[j] = [
+                randomPerson.dni,
+                randomPerson.apellido,
+                randomPerson.nombre,
+                randomPerson.edad,
+                <img src={randomPerson.fotografia} alt="Profile pic"></img>, 
+                randomPerson.estado,
+            [
+                <ModalComponent 
+                    title="Aceptar?" 
+                    actionButton="Aceptar" 
+                    aceptarButton="green" 
+                    cancelButton="Cancelar"
+                    data={randomPerson}
+                    onActionClick={aceptarPasajero}
+                    disableAfterAtion={true}
+                    modalBody={aceptarModalBody} 
+                    text="Aceptar"/>,
+                <ModalComponent 
+                    title="Rechazar?" 
+                    actionButton="Rechazar" 
+                    aceptarButton="red" 
+                    cancelButton="Cancelar"
+                    data={randomPerson}
+                    onActionClick={rechazarPasajero}
+                    disableAfterAtion={true}
+                    modalBody={rechazarModalBody} 
+                    text="Rechazar"/>
+            ]                
+        ]
     }
 
 
@@ -98,12 +135,8 @@ const VerViajeComponent = () => {
             setChecked((viaje[0].equipajePermitido) ? true : false)
             observacionesRef.current.value = viaje[0].observacion
             })
-        
-
-            
+         
         getPasajerosXViaje(id).then((pasajeroXViaje) => {
-
-            
             var rowsArray = []
             for (let i = 0; i < pasajeroXViaje.length; i++) {
                 rowsArray[i] = [
@@ -132,49 +165,16 @@ const VerViajeComponent = () => {
                             modalBody={rechazarModalBody} 
                             text="Rechazar"/>
                     ]
-                ]
-                
+                ]   
             }
 
-            var randomRows = []
-            for (let j = 0; j < 7; j++) {
-                var randomPerson = MockData[Math.floor(Math.random() * MockData.length)]
-               randomRows[j] = [
-                    randomPerson.dni,
-                    randomPerson.apellido,
-                    randomPerson.nombre,
-                    randomPerson.edad,
-                    <img src={randomPerson.fotografia} alt="Profile pic"></img>, 
-                    randomPerson.estado,
-                   [
-                    <ModalComponent 
-                        title="Aceptar?" 
-                        actionButton="Aceptar" 
-                        aceptarButton="green" 
-                        cancelButton="Cancelar"
-                        data={randomPerson}
-                        onActionClick={aceptarPasajero}
-                        modalBody={aceptarModalBody} 
-                        text="Aceptar"/>,
-                    <ModalComponent 
-                        title="Rechazar?" 
-                        actionButton="Rechazar" 
-                        aceptarButton="red" 
-                        cancelButton="Cancelar"
-                        data={randomPerson}
-                        onActionClick={rechazarPasajero}
-                        modalBody={rechazarModalBody} 
-                        text="Rechazar"/>
-                ]                
-            ]
-                
-            }
             const newArray = rowsArray.concat(randomRows)
             setRows(newArray)
         })
-        
-    },[])
+    },[clicked])
    
+
+    
     return(
         <>
             <div className='modificar-viaje-container'>

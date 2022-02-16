@@ -1,6 +1,6 @@
-import './ModificarViajeComponent.css'
+import './CrearViajeComponent.css'
 import ColoredLine from '../ColoredLine/ColoredLine';
-import InputsComponent from './InputsComponent/InputsComponent';
+import InputsComponent from '../../components/ModificarViajeComponent/InputsComponent/InputsComponent';
 import useStorage from '../../hooks/useStorage'
 import { useState, useRef, useEffect } from 'react'
 import {

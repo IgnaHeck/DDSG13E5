@@ -9,8 +9,8 @@ export default function ModalComponent(props) {
     const actionButton = props.actionButton;
     const cancelButton = props.cancelButton;
     const modalBody = props.modalBody;
-    const isDisabled = props.isDisabled;
-    const isActionPerformed = props.isActionPerformed;
+    var isDisabled = props.isDisabled || false;
+    const disableAfterAtion = props.disableAfterAtion;
     const onActionClick = props.onActionClick;
     const title = props.title;
     const aceptarButtonColor = props.aceptarButton || 'blue'
@@ -32,6 +32,9 @@ export default function ModalComponent(props) {
         } else {
             setOpen(false)
         }
+        if(disableAfterAtion){
+            isDisabled = true
+        }
     }
 
      return (
@@ -51,8 +54,8 @@ export default function ModalComponent(props) {
             </ModalBody>
 
             <ModalFooter>
-                <Button isDisabeld={isActionPerformed} colorScheme={aceptarButtonColor} onClick={handleOnActionClick}>{actionButton}</Button>
-                <Button isDisabeld={isActionPerformed} colorScheme={cancelarButtonColor} mx={2} onClick={handleOnClick}>{cancelButton}</Button>
+                <Button colorScheme={aceptarButtonColor} onClick={handleOnActionClick}>{actionButton}</Button>
+                <Button colorScheme={cancelarButtonColor} mx={2} onClick={handleOnClick}>{cancelButton}</Button>
             </ModalFooter>
             </ModalContent>
         </Modal>

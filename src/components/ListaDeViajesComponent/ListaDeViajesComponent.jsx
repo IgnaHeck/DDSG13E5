@@ -55,7 +55,7 @@ const ListaDeViajesComponent = () => {
                     viajesArray[i].DireccionDestino.Localidad.Provincia.nombre, 
                     viajesArray[i].estado, 
                     <div className="acciones-btn"><a href={`/ver-viaje/${viajesArray[i].id}`}><Button>Ver</Button></a>
-                        <a href="/modificar-viaje"><Button mx={1}>Edit</Button></a>
+                        <a href={`/modificar-viaje/${viajesArray[i].id}`}><Button mx={1}>Edit</Button></a>
                         <ModalComponent m={0} display="flex" title='Eliminar Viaje?' actionButton='Eliminar' aceptarButton="red" cancelButton="Cancelar" modalBody={eliminarModalBody} text='Eliminar'/>
                     </div>]
             }
@@ -95,7 +95,7 @@ const ListaDeViajesComponent = () => {
             <div className='lista-viajes-component-container'>
                 <div className="busqueda-container">
                     <Input ref={inputRef} bg='white' placeholder="Buscar viaje..." onChange={buscarViaje}></Input>
-                    <a className="programar-viaje-mas-button" href="modificar-viaje">+</a>
+                    <a className="programar-viaje-mas-button" href="crear-viaje">+</a>
                 </div>
                 <div className="grilla-container">
                     <GrillaComponent columns={columns} rows={filteredRows} size='sm'></GrillaComponent>

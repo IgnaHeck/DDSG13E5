@@ -1,9 +1,10 @@
 // Imports
 import './App.css';
 import MenuComponent from './components/MenuComponent/MenuComponent';
-import EliminarPasajeroComponent from './components/EliminarPasajeroComponent/EliminarPasajeroComponent'
-import EliminarViajeComponent from './components/EliminarViajeComponent/EliminarViajeComponent';
+import CrearViajeComponent from './components/CrearViajeComponent/CrearViajeComponent';
 import ModificarViajeComponent from './components/ModificarViajeComponent/ModificarViajeComponent';
+import EliminarViajeComponent from './components/EliminarViajeComponent/EliminarViajeComponent';
+import EliminarPasajeroComponent from './components/EliminarPasajeroComponent/EliminarPasajeroComponent'
 import VerViajeComponent from './components/VerViajeComponent/VerViajeComponent';
 import ListaDeViajesComponent from './components/ListaDeViajesComponent/ListaDeViajesComponent'
 import { ChakraProvider } from '@chakra-ui/react'
@@ -22,7 +23,8 @@ function App() {
           <Route path="/" element={<MenuComponent/>}/>
           <Route path="/eliminar-pasajero" element={<EliminarPasajeroComponent/>}/>
           <Route path="/eliminar-viaje" element={<EliminarViajeComponent/>}/>
-          <Route path="/modificar-viaje" element={<ModificarViajeComponent/>}/>
+          <Route path="/crear-viaje" element={<CrearViajeComponent/>}/>
+          <Route path="/modificar-viaje/:id" element={<ModificarViajeComponent/>}/>
           <Route path="/ver-viaje/:id" element={<VerViajeComponent/>}/>
           <Route path="/viajes" element={<ListaDeViajesComponent/>}/>
         </Routes>

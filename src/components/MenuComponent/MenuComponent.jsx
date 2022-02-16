@@ -6,7 +6,6 @@ import { Button, Stack, Text, Input, Menu,
     Portal
     } from '@chakra-ui/react'
 import GrillaComponent from '../GrillaComponent/GrillaComponent';
-import MockMenu from '../../assets/MOCK_MENU.json';
 import useStorage from '../../hooks/useStorage'
 import { useEffect, useState } from 'react';
 
