@@ -39,12 +39,14 @@ const VerViajeComponent = () => {
     const precioRef = useRef()
     const equipajeRef = useRef()
     const observacionesRef = useRef()
+    const inputRef = useRef('')
     
     const { getViaje, getPasajerosXViaje, insertPasajero, insertPersona, insertPasajeroXViaje } = useStorage(); 
     const { id } = useParams();
     const [isChecked, setChecked] = useState(false);
     const [rows, setRows] = useState([]);
     const [clicked, setClicked] = useState()
+    const [filteredRows, setFilteredRows]= useState([])
 
     const columns = [
         'DNI',
@@ -79,41 +81,7 @@ const VerViajeComponent = () => {
         })
     }
     
-    const randomRows = []
-    for (let j = 0; j < 7; j++) {
-        var randomPerson = MockData[Math.floor(Math.random() * MockData.length)]
-        randomRows[j] = [
-                randomPerson.dni,
-                randomPerson.apellido,
-                randomPerson.nombre,
-                randomPerson.edad,
-                <img src={randomPerson.fotografia} alt="Profile pic"></img>, 
-                randomPerson.estado,
-            [
-                <ModalComponent 
-                    title="Aceptar?" 
-                    actionButton="Aceptar" 
-                    aceptarButton="green" 
-                    cancelButton="Cancelar"
-                    data={randomPerson}
-                    onActionClick={aceptarPasajero}
-                    disableAfterAtion={true}
-                    modalBody={aceptarModalBody} 
-                    text="Aceptar"/>,
-                <ModalComponent 
-                    title="Rechazar?" 
-                    actionButton="Rechazar" 
-                    aceptarButton="red" 
-                    cancelButton="Cancelar"
-                    data={randomPerson}
-                    onActionClick={rechazarPasajero}
-                    disableAfterAtion={true}
-                    modalBody={rechazarModalBody} 
-                    text="Rechazar"/>
-            ]                
-        ]
-    }
-
+    
 
     useEffect(() =>{
         getViaje(id).then((viaje)=> {
@@ -134,46 +102,106 @@ const VerViajeComponent = () => {
             precioRef.current.value = viaje[0].precio
             setChecked((viaje[0].equipajePermitido) ? true : false)
             observacionesRef.current.value = viaje[0].observacion
-            })
-         
-        getPasajerosXViaje(id).then((pasajeroXViaje) => {
-            var rowsArray = []
-            for (let i = 0; i < pasajeroXViaje.length; i++) {
-                rowsArray[i] = [
-                    pasajeroXViaje[i].Pasajero.Persona.dni, 
-                    pasajeroXViaje[i].Pasajero.Persona.apellido, 
-                    pasajeroXViaje[i].Pasajero.Persona.nombre, 
-                    pasajeroXViaje[i].Pasajero.Persona.edad, 
-                    <img src={pasajeroXViaje[i].Pasajero.Persona.fotografia} alt="Profile pic"></img>, 
-                    pasajeroXViaje[i].estado,
-                    [
-                        //NO ES ACA
-                        <ModalComponent 
-                            title="Aceptar?" 
-                            isDisabled={pasajeroXViaje[i].estado === 'Aceptado' ||  pasajeroXViaje[i].estado === 'Rechazado' ? true : false}
-                            actionButton="Aceptar"
-                            aceptarButton="green"
-                            cancelButton="Cancelar"
-                            modalBody={aceptarModalBody} 
-                            text="Aceptar"/>,
-                        <ModalComponent 
-                            title="Rechazar?" 
-                            isDisabled={pasajeroXViaje[i].estado === 'Aceptado' ||  pasajeroXViaje[i].estado === 'Rechazado' ? true : false} 
-                            actionButton="Rechazar"  
-                            aceptarButton="red" 
-                            cancelButton="Cancelar"
-                            modalBody={rechazarModalBody} 
-                            text="Rechazar"/>
-                    ]
-                ]   
-            }
 
-            const newArray = rowsArray.concat(randomRows)
-            setRows(newArray)
+
+            getPasajerosXViaje(id).then((pasajeroXViaje) => {
+                var rowsArray = []
+                for (let i = 0; i < pasajeroXViaje.length; i++) {
+                    rowsArray[i] = [
+                        pasajeroXViaje[i].Pasajero.Persona.dni, 
+                        pasajeroXViaje[i].Pasajero.Persona.apellido, 
+                        pasajeroXViaje[i].Pasajero.Persona.nombre, 
+                        pasajeroXViaje[i].Pasajero.Persona.edad, 
+                        <img src={pasajeroXViaje[i].Pasajero.Persona.fotografia} alt="Profile pic"></img>, 
+                        pasajeroXViaje[i].estado,
+                        [
+                            //NO ES ACA
+                            <ModalComponent 
+                                title="Aceptar?" 
+                                disableIfCondition={pasajeroXViaje[i].estado === 'Aceptado' ||  pasajeroXViaje[i].estado === 'Rechazado' || estadoRef.current.value === 'Cancelado' || estadoRef.current.value === 'Finalizado' ? true : false}
+                                actionButton="Aceptar"
+                                aceptarButton="green"
+                                cancelButton="Cancelar"
+                                modalBody={aceptarModalBody} 
+                                text="Aceptar"/>,
+                            <ModalComponent 
+                                title="Rechazar?" 
+                                isDisabled={pasajeroXViaje[i].estado === 'Aceptado' ||  pasajeroXViaje[i].estado === 'Rechazado' || estadoRef.current.value === 'Cancelado' || estadoRef.current.value === 'Finalizado' ? true : false} 
+                                actionButton="Rechazar"  
+                                aceptarButton="red" 
+                                cancelButton="Cancelar"
+                                modalBody={rechazarModalBody} 
+                                text="Rechazar"/>
+                        ]
+                    ]   
+                }
+                const newArray = rowsArray.concat(cargarPasajeros())
+                setRows(newArray)
+                setFilteredRows(newArray)
+            })
         })
     },[clicked])
-   
 
+    const randomRows = []
+    const cargarPasajeros = () => {
+        for (let j = 0; j < 7; j++) {
+            var randomPerson = MockData[Math.floor(Math.random() * MockData.length)]
+            randomRows[j] = [
+                    randomPerson.dni,
+                    randomPerson.apellido,
+                    randomPerson.nombre,
+                    randomPerson.edad,
+                    <img src={randomPerson.fotografia} alt="Profile pic"></img>, 
+                    randomPerson.estado,
+                [
+                    <ModalComponent 
+                        title="Aceptar?" 
+                        actionButton="Aceptar" 
+                        aceptarButton="green" 
+                        cancelButton="Cancelar"
+                        data={randomPerson}
+                        onActionClick={aceptarPasajero}
+                        disableIfCondition={estadoRef.current.value === 'Finalizado' || estadoRef.current.value === 'Cancelado' ? true : false}
+                        disableAfterAction={true}
+                        modalBody={aceptarModalBody} 
+                        text="Aceptar"/>,
+                    <ModalComponent 
+                        title="Rechazar?" 
+                        actionButton="Rechazar" 
+                        aceptarButton="red" 
+                        cancelButton="Cancelar"
+                        data={randomPerson}
+                        onActionClick={rechazarPasajero}
+                        disableIfCondition={estadoRef.current.value === 'Finalizado' || estadoRef.current.value === 'Cancelado' ? true : false}
+                        disableAfterAtion={true}
+                        modalBody={rechazarModalBody} 
+                        text="Rechazar"/>
+                ]                
+            ]
+        }
+        return randomRows
+    }
+
+    const buscarPasajero = () => {
+        var listaFiltrada = []
+        console.log(inputRef.current.value)
+        if (inputRef.current.value !== '') {
+            for (let i = 0; i < rows.length; i++) {
+                if (
+                    rows[i][0].toString().includes(inputRef.current.value.toLowerCase()) ||
+                    rows[i][1].toLowerCase().includes(inputRef.current.value.toLowerCase()) ||
+                    rows[i][2].toLowerCase().includes(inputRef.current.value.toLowerCase()) ||
+                    rows[i][3].toString().includes(inputRef.current.value.toLowerCase()) ||
+                    rows[i][5].toLowerCase().includes(inputRef.current.value.toLowerCase())
+                    ) {
+                    listaFiltrada[i] = rows[i]
+                }
+            }
+            setFilteredRows(listaFiltrada)
+        } else {
+            setFilteredRows(rows)
+        }
+    }
     
     return(
         <>
@@ -245,11 +273,11 @@ const VerViajeComponent = () => {
                     <Textarea ref={observacionesRef} bg='white' className='textarea' placeholder='Escriba Aquí...' isDisabled></Textarea>
                 </div>
             <div className="busqueda-container">
-                <Input bg='white' placeholder="Buscar Pasajero..."></Input>
+                <Input ref={inputRef} bg='white' placeholder="Buscar Pasajero..." onChange={buscarPasajero}></Input>
             </div>
         </div>
             <div className='ver-viaje-container'>
-                <GrillaComponent columns={columns} rows={rows}></GrillaComponent>
+                <GrillaComponent columns={columns} rows={filteredRows}></GrillaComponent>
             </div>
             <div className="footer">
                 <a href="/viajes"> <Button>Volver</Button> </a>

@@ -24,12 +24,12 @@ const ListaDeViajesComponent = () => {
 
     // const rows = [[]]
     const inputRef = useRef('');
-    const { getViajeByConductorID, insertDireccion, insertViaje } = useStorage();
+    const { getViajeByConductorID, updateViaje } = useStorage();
     const [viajes, setViajes] = useState([]);
     const [filteredRows, setFilteredRows]= useState([]);
     const [rows, setRows] = useState([]);
     const [clicked, setClicked] = useState();
-    const { id, data } = useParams();
+    const { id } = useParams();
     // const viajeRef = useRef(null);
 
     useEffect(()=>{
@@ -61,7 +61,7 @@ const ListaDeViajesComponent = () => {
                     viajesArray[i].DireccionDestino.Localidad.Provincia.nombre, 
                     viajesArray[i].estado, 
                     <div className="acciones-btn"><a href={`/ver-viaje/${viajesArray[i].id}`}><Button>Ver</Button></a>
-                        <a href={`/modificar-viaje/${viajesArray[i].id}`}><Button mx={1}>Edit</Button></a>
+                        <a href={`/modificar-viaje/${viajesArray[i].id}`}><Button isDisabled={viajesArray[i].estado === 'Programado' ? false : true} mx={1}>Edit</Button></a>
                         <ModalComponent 
                             m={0} 
                             display="flex" 
@@ -71,7 +71,8 @@ const ListaDeViajesComponent = () => {
                             cancelButton="Cerrar" 
                             data={viajesArray[i]}
                             onActionClick={cancelarViaje}
-                            disabledAfterAction={true}
+                            disableIfCondition={viajesArray[i].estado === 'Programado' ? false : true}
+                            disableAfterAction={true}
                             modalBody={cancelarModalBody} 
                             text='Cancelar'/>
                         <ModalComponent 
@@ -83,7 +84,8 @@ const ListaDeViajesComponent = () => {
                             cancelButton="Cancelar"
                             data={viajesArray[i]}
                             onActionClick={finalizarViaje}
-                            disabledAfterAction={true}
+                            disableIfCondition={viajesArray[i].estado === 'Programado' ? false : true}
+                            disableAfterAction={true}
                             modalBody={finalizarModalBody} 
                             text='Finalizar'/>
                     </div>]
@@ -91,36 +93,37 @@ const ListaDeViajesComponent = () => {
             setRows(rowsList)
             setFilteredRows(rowsList)
         }
-    },[])
+    },[clicked])
 
     const cancelarViaje = (data) => {
         console.log(data)
-        console.log(data.DireccionOrigen)
-        insertViaje(
+        updateViaje(
+            data.id,
             data.precio,
             data.observacion,
             'Cancelado',
             data.espacioDefinido,
             data.equipajePermitido,
-            data.DireccionOrigen,
-            data.DireccionDestino,
-            data.Vehiculo,
-            data.Conductor)
+            data.DireccionOrigen.id,
+            data.DireccionDestino.id,
+            data.Vehiculo.id,
+            data.Conductor.id)
         setClicked(!clicked)
     }
 
     const finalizarViaje = (data) =>{
         console.log(data)
-        insertViaje(
+        updateViaje(
+            data.id,
             data.precio,
             data.observacion,
             "Finalizado",
             data.espacioDefinido,
             data.equipajePermitido,
-            data.DireccionOrigen,
-            data.DireccionDestino,
-            data.Vehiculo,
-            data.Conductor)
+            data.DireccionOrigen.id,
+            data.DireccionDestino.id,
+            data.Vehiculo.id,
+            data.Conductor.id)
         setClicked(!clicked)
     }
 

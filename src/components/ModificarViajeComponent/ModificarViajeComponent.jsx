@@ -15,11 +15,11 @@ import {
     Input, InputGroup, InputLeftAddon,
     Textarea,
   } from '@chakra-ui/react';
-//  import { useParams } from 'react-router-dom';
+  import { useParams } from 'react-router-dom';
 
 const ModificarViajeComponent = () => {
     // Storage functions
-    const { getVehiculo, getVehiculos, insertViaje, insertDireccion, getDirecciones, /*getViaje*/ } = useStorage();
+    const { getVehiculo, getVehiculos, insertViaje, insertDireccion, getDirecciones, getViaje } = useStorage();
     // Ref declarations
     const provinciaORef = useRef();
     const provinciaDRef = useRef();
@@ -41,14 +41,15 @@ const ModificarViajeComponent = () => {
     const [ isClicked, setClicked ] = useState(false);
     const [ vehiculoSelected, setVehiculoSelected ] = useState(null);
     const [ vehiculos, setVehiculos ] = useState([]);
-    const [ isChecked, setChecked ] = useState(true);
+    const [ isChecked, setChecked ] = useState(1);
     const [ canSave, setCanSave ] = useState(true);
     const [ vehicleCapacity, setCapacity ] = useState(1);
     const [ isDisabled, setDisabled ] = useState(true);
     const [ conductorID, setConductorID ] = useState(null);
     const [ direcciones, setDirecciones ] = useState([]);
+    const [ provinciaSelectedID, setProvinciaSelectedID ] = useState(0);
 
-//    const { id } = useParams();
+    const { id } = useParams();
 
     const handleOnClick = () => {
         setClicked(!isClicked);
@@ -74,10 +75,10 @@ const ModificarViajeComponent = () => {
         })
 
         getVehiculo(vehiculoSelected).then((vehiculoUnico) => {
+            console.log("AAAA",vehiculoUnico[0].equipaje)
             setChecked(vehiculoUnico[0].equipaje);
             setCapacity(vehiculoUnico[0].capacidadMaxima);
             setConductorID(vehiculoUnico[0].propietarioID)
-
         })   
     },[isClicked]);
 
@@ -89,25 +90,26 @@ const ModificarViajeComponent = () => {
             }
             setDirecciones(direccionesArray.reverse())
         })
-    },[isClicked]);
+    },[]);
 
-/*    useEffect(()=>{
-        getViaje(id).then((viaje)=> {
-            provinciaORef.current[0].text = viaje[0].DireccionOrigen.Localidad.Provincia.nombre
-            provinciaDRef.current[0].text = viaje[0].DireccionDestino.Localidad.Provincia.nombre
-            localidadORef.current[0].text = viaje[0].DireccionOrigen.Localidad.nombre
-            localidadDRef.current[0].text = viaje[0].DireccionDestino.Localidad.nombre
-            calleORef.current.attributes[0].value = viaje[0].DireccionOrigen.calle
-            calleDRef.current.attributes[0].value = viaje[0].DireccionDestino.calle
-            alturaORef.current.attributes[0].value = viaje[0].DireccionOrigen.altura
-            alturaDRef.current.attributes[0].value = viaje[0].DireccionDestino.altura
-            vehiculoRef.current.value = viaje[0].Vehiculo.patente
-            capacidadMaximaRef.current.value = viaje[0].espacioDefinido
-            precioRef.current.value = viaje[0].precio
-            observacionRef.current.value = viaje[0].observacion
-        })
-    },[isClicked]);*/
-    // NO FUNCIONA BIEN (TODO LO REFERENTE A ESTO ESTA COMENTADO)
+    // useEffect(()=>{
+    //     getViaje(id).then((viaje)=> {
+    //         setProvinciaSelectedID(viaje[0].DireccionOrigen.Localidad.Provincia.id)
+    //         console.log("A:",viaje[0].DireccionOrigen.Localidad.Provincia.id)
+    //             provinciaORef.current.selectedIndex = viaje[0].DireccionOrigen.Localidad.Provincia.id
+    //             provinciaDRef.current.selectedIndex = viaje[0].DireccionDestino.Localidad.Provincia.id
+    //             localidadORef.current.selectedIndex = viaje[0].DireccionOrigen.Localidad.id
+    //             localidadDRef.current.selectedIndex = viaje[0].DireccionDestino.Localidad.id
+    //             calleORef.current.attributes[0].value = viaje[0].DireccionOrigen.calle
+    //             calleDRef.current.attributes[0].value = viaje[0].DireccionDestino.calle
+    //             alturaORef.current.attributes[0].value = viaje[0].DireccionOrigen.altura
+    //             alturaDRef.current.attributes[0].value = viaje[0].DireccionDestino.altura
+    //             vehiculoRef.current.value = viaje[0].Vehiculo.id
+    //             capacidadMaximaRef.current.value = viaje[0].espacioDefinido
+    //             precioRef.current.value = viaje[0].precio
+    //             observacionRef.current.value = viaje[0].observacion
+    //         })
+    // },[]);
 
     const optionsVehiculos = []
     for (let i = 0; i < vehiculos.length; i++) {
@@ -155,9 +157,9 @@ const ModificarViajeComponent = () => {
         <>
             <form ref={formRef} onSubmit={handleSave} className='modificar-viaje-container'>
                 <span className='span-container'>Origen:</span>
-                <InputsComponent provinciaRef={provinciaORef} localidadRef={localidadORef} calleRef={calleORef} alturaRef={alturaORef} canSave={setCanSave}/>
+                <InputsComponent provinciaSelectedState={provinciaSelectedID} sentido="Origen" calleRef={calleORef} alturaRef={alturaORef} canSave={setCanSave}/>
                 <span className='span-container'>Destino:</span>
-                <InputsComponent provinciaRef={provinciaDRef} localidadRef={localidadDRef} calleRef={calleDRef} alturaRef={alturaDRef}/>
+                <InputsComponent sentido="Destino" calleRef={calleDRef} alturaRef={alturaDRef}/>
                 <ColoredLine color='gray' height='2px'/>
                 <div className='segunda-parte'>
                     <p className='parrafo-2'>Vehiculo:</p>

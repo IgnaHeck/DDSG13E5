@@ -93,48 +93,60 @@ const useStorage = () => {
         const { data } = await supabase
         .from('Viaje')
         .select(`
+        id,
+        precio,
+        observacion,
+        estado,
+        espacioDefinido,
+        equipajePermitido,
+        DireccionOrigen:origenID ( 
             id,
-            precio,
-            observacion,
-            estado,
-            espacioDefinido,
-            equipajePermitido,
-            DireccionOrigen:origenID ( 
-                altura, 
-                calle, 
-                Localidad:localidadID ( 
-                    nombre,
-                    Provincia: provinciaID ( nombre )
-                )
+            altura, 
+            calle, 
+            Localidad:localidadID ( 
+                id,
+                nombre,
+                Provincia: provinciaID ( 
+                    id,
+                    nombre )
+            )
+        ),
+        DireccionDestino:destinoID ( 
+            id,
+            altura, 
+            calle, 
+            Localidad:localidadID ( 
+                id,
+                nombre,
+                Provincia: provinciaID ( 
+                    id,
+                    nombre )
+            )
+        ),
+        Vehiculo:vehiculoID (
+            id,
+            capacidadMaxima,
+            color,
+            equipaje,
+            patente,
+            Modelo:modeloID (
+                id,
+                name,
+                Marca: marcaID ( name )
+            )
+        ),
+        Conductor:conductorID (
+            Persona:personaID ( 
+                id,
+                apellido,
+                nombre,
+                dni,
+                edad,
+                fotografia
             ),
-            DireccionDestino:destinoID ( 
-                altura, 
-                calle, 
-                Localidad:localidadID ( 
-                    nombre,
-                    Provincia: provinciaID ( nombre )
-                )
-            ),
-            Vehiculo:vehiculoID (
-                capacidadMaxima,
-                color,
-                equipaje,
-                patente,
-                Modelo:modeloID (
-                    name,
-                    Marca: marcaID ( name )
-                )
-            ),
-            Conductor:conductorID (
-                Persona:personaID ( 
-                    apellido,
-                    nombre,
-                    dni,
-                    edad,
-                    fotografia
-                ),
-                fotoRegistro
-            )`
+            fotoRegistro
+        )
+        `
             )
         .eq('id', id)
         return data
@@ -151,33 +163,40 @@ const useStorage = () => {
         espacioDefinido,
         equipajePermitido,
         DireccionOrigen:origenID ( 
+            id,
             altura, 
             calle, 
             Localidad:localidadID ( 
+                id,
                 nombre,
                 Provincia: provinciaID ( nombre )
             )
         ),
         DireccionDestino:destinoID ( 
+            id,
             altura, 
             calle, 
             Localidad:localidadID ( 
+                id,
                 nombre,
                 Provincia: provinciaID ( nombre )
             )
         ),
         Vehiculo:vehiculoID (
+            id,
             capacidadMaxima,
             color,
             equipaje,
             patente,
             Modelo:modeloID (
+                id,
                 name,
                 Marca: marcaID ( name )
             )
         ),
         Conductor:conductorID (
             Persona:personaID ( 
+                id,
                 apellido,
                 nombre,
                 dni,
@@ -201,22 +220,27 @@ const useStorage = () => {
         espacioDefinido,
         equipajePermitido,
         DireccionOrigen:origenID ( 
+            id,
             altura, 
             calle, 
             Localidad:localidadID ( 
+                id,
                 nombre,
                 Provincia: provinciaID ( nombre )
             )
         ),
         DireccionDestino:destinoID ( 
+            id,
             altura, 
             calle, 
             Localidad:localidadID ( 
+                id,
                 nombre,
                 Provincia: provinciaID ( nombre )
             )
         ),
         Vehiculo:vehiculoID (
+            id,
             capacidadMaxima,
             color,
             equipaje,
@@ -228,6 +252,7 @@ const useStorage = () => {
         ),
         Conductor:conductorID (
             Persona:personaID ( 
+                id,
                 apellido,
                 nombre,
                 dni,
@@ -294,6 +319,33 @@ const useStorage = () => {
         return data
     } 
   
+    const updateViaje = async(
+        id, 
+        precio,
+        observacion,
+        estado,
+        espacioDefinido,
+        equipajePermitido,
+        origenID,
+        destinoID,
+        vehiculoID, 
+        conductorID) => {
+        const { data } = await supabase
+        .from('Viaje')
+        .update([{
+            precio: precio,
+            observacion: observacion,
+            estado: estado,
+            espacioDefinido: espacioDefinido,
+            equipajePermitido: equipajePermitido,
+            origenID: origenID,
+            destinoID: destinoID,
+            vehiculoID: vehiculoID, 
+            conductorID: conductorID
+        }])
+        .eq('id',id)
+        return data
+    }
 
     return{
         getVehiculos,
@@ -314,7 +366,8 @@ const useStorage = () => {
         insertViaje,
         insertPersona,
         insertPasajero,
-        insertPasajeroXViaje
+        insertPasajeroXViaje,
+        updateViaje
     };
 }
 

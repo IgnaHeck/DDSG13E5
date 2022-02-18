@@ -2,14 +2,19 @@ import './InputsComponent.css'
 import { Select, Input } from '@chakra-ui/react'
 import useStorage from '../../../hooks/useStorage'
 import { useEffect, useState, useRef } from 'react';
+import { useParams } from 'react-router-dom';
 
 const InputsComponent = (props) => {
-    const { getProvincias, getLocalidades } = useStorage();
-    const provinciaRef = props.provinciaRef
-    const localidadRef = props.localidadRef
+    const { id } = useParams();
+
+    const { getProvincias, getLocalidades, getViaje } = useStorage();
+    const provinciaRef = useRef();
+    const localidadRef = useRef();
     const canSave = props.canSave
     const calleRef = props.calleRef
     const alturaRef = props.alturaRef
+    const sentido = props.sentido || ''
+    const provinciaSelectedID = props.provinciaSelectedID
     const [ isDisabled, setDisabled ] = useState(true);
     const [ isProvinciaSelected, setProvinciaSelectedBoolean ] = useState(true);
     const [ isLocalidadSelected, setLocalidadSelectedBoolean ] = useState(true);
@@ -36,27 +41,73 @@ const InputsComponent = (props) => {
     }
 
     useEffect(()=>{
-            getProvincias().then((provincia) => {
-                const provinciasArray = []
-                for (let i = 0; i < provincia.length; i++){
-                    provinciasArray[i] = provincia[i]
+        getProvincias().then((provincia) => {
+            const provinciasArray = []
+            for (let i = 0; i < provincia.length; i++){
+                provinciasArray[i] = provincia[i]
+            }
+            setProvincias(provinciasArray)
+        })
+    },[]);
+        
+    useEffect(()=>{
+        console.log("viaje id:",id)
+        getViaje(id).then((viaje)=> {
+            console.log("Consultando viaje")
+            haceElGet(viaje)
+        })
+        const haceElGet = (viaje)=>{
+            const getProvinciaID = ()=>{
+                var answer = '';
+                switch(sentido){
+                    case 'Origen':
+                        answer =  viaje[0].DireccionOrigen.Localidad.Provincia.id
+                        break;
+                    case 'Destino':
+                        answer =  viaje[0].DireccionDestino.Localidad.Provincia.id
+                        break;
+                    default:
+                        answer = 0;
                 }
-                setProvincias(provinciasArray)
-            })
-            getLocalidades(provinciaSelected).then((localidad) => {
+                console.log("ANSER1:",answer)
+                return answer;
+            }
+            const getLocalidadID = ()=>{ 
+                var answer = '';
+                switch(sentido){
+                    case 'Origen':
+                        answer = viaje[0].DireccionOrigen.Localidad.id
+                        break;
+                    case 'Destino':
+                        answer = viaje[0].DireccionDestino.Localidad.id
+                        break;
+                    default:
+                        answer = 0;
+                }
+                console.log("ANSER2:",answer)
+                return answer;
+            }
+
+            getLocalidades(getProvinciaID()).then((localidad) => {
+                console.log("Consultando localidades")
                 const localidadesArray = []
                 for (let i = 0; i < localidad.length; i++){
                     localidadesArray[i] = localidad[i]
                 }
                 setLocalidades(localidadesArray)
+                provinciaRef.current.selectedIndex = getProvinciaID()
+                localidadRef.current.selectedIndex = getLocalidadID()
             })
-            if(localidadRef.current.value !== ''){
-                setLocalidadSelectedBoolean(false);
-            } else {
-                setLocalidadSelectedBoolean(true);
-            }
-    },[isClicked]);
+        }
 
+        if(localidadRef.current.value !== ''){
+            setLocalidadSelectedBoolean(false);
+        } else {
+            setLocalidadSelectedBoolean(true);
+        }
+
+    },[provinciaSelectedID, isClicked])
+//usar otro use effect porque dan conflicto las dependencias
     const optionsProvincia = []
     for (let i = 0; i < provincias.length; i++) {
         optionsProvincia[i] = <option key={i} value={provincias[i].id}>{provincias[i].nombre}</option>

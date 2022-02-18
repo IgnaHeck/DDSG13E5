@@ -7,55 +7,75 @@ import { Button, Stack, Text, Input, Menu,
     } from '@chakra-ui/react'
 import GrillaComponent from '../GrillaComponent/GrillaComponent';
 import useStorage from '../../hooks/useStorage'
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 const MenuComponent = () => {
     const { getViajes } = useStorage();
-
-    const [viajes, setViajes ] = useState([]);
+    const [rows, setRows] = useState([]);
+    const [filteredRows, setFilteredRows]= useState([]);
+    const inputRef = useRef('')
 
     const columns = [
         'ID',
-        'Calle',
-        'Altura',
-        'Localidad',
-        'Provincia',
-        'Calle',
-        'Altura',
-        'Localidad',
-        'Provincia',
+        'Calle O.',
+        'Altura O.',
+        'Localidad O.',
+        'Provincia O.',
+        'Calle D.',
+        'Altura D.',
+        'Localidad D.',
+        'Provincia D.',
         'Conductor', 
         'Acciones'
     ];
-    const rows = [[]]
 
     useEffect(()=>{
         getViajes().then((viaje) =>{
             const listaViajes = []
             for (let i = 0; i < viaje.length; i++) {
-                listaViajes[i] = viaje[i];
+                listaViajes[i] = [
+                    viaje[i].id,
+                    viaje[i].DireccionOrigen.calle, 
+                    viaje[i].DireccionOrigen.altura, 
+                    viaje[i].DireccionOrigen.Localidad.nombre, 
+                    viaje[i].DireccionOrigen.Localidad.Provincia.nombre, 
+                    viaje[i].DireccionDestino.calle, 
+                    viaje[i].DireccionDestino.altura, 
+                    viaje[i].DireccionDestino.Localidad.nombre, 
+                    viaje[i].DireccionDestino.Localidad.Provincia.nombre,
+                    [viaje[i].Conductor.Persona.nombre," ",viaje[i].Conductor.Persona.apellido], 
+                    [<a href="/error">Ver Viaje</a>]
+                ]
             }
-            setViajes(listaViajes)
+            setRows(listaViajes)
+            setFilteredRows(listaViajes)
         })
 
     },[]);
 
-    console.log(viajes)
-
-    viajes.forEach((viaje, index) =>{
-        rows.push([
-            viaje.id, 
-            viaje.DireccionOrigen.calle, 
-            viaje.DireccionOrigen.altura, 
-            viaje.DireccionOrigen.Localidad.nombre, 
-            viaje.DireccionOrigen.Localidad.Provincia.nombre, 
-            viaje.DireccionDestino.calle, 
-            viaje.DireccionDestino.altura, 
-            viaje.DireccionDestino.Localidad.nombre, 
-            viaje.DireccionDestino.Localidad.Provincia.nombre,
-            [viaje.Conductor.Persona.nombre," ",viaje.Conductor.Persona.apellido], 
-            [<a href="/error">Ver Viaje</a>]])
-    })
+    const buscarViaje = () => {
+        var listaFiltrada = []
+        if (inputRef.current.value !== '') {
+            for (let i = 0; i < rows.length; i++) {
+                if (
+                    rows[i][1].toLowerCase().includes(inputRef.current.value.toLowerCase()) ||
+                    rows[i][2].toLowerCase().includes(inputRef.current.value.toLowerCase()) ||
+                    rows[i][3].toLowerCase().includes(inputRef.current.value.toLowerCase()) ||
+                    rows[i][4].toLowerCase().includes(inputRef.current.value.toLowerCase()) ||
+                    rows[i][5].toLowerCase().includes(inputRef.current.value.toLowerCase()) ||
+                    rows[i][6].toLowerCase().includes(inputRef.current.value.toLowerCase()) ||
+                    rows[i][7].toLowerCase().includes(inputRef.current.value.toLowerCase()) ||
+                    rows[i][8].toLowerCase().includes(inputRef.current.value.toLowerCase()) ||
+                    rows[i][9][0].concat(rows[i][9][1]).concat(rows[i][9][2]).toLowerCase().includes(inputRef.current.value.toLowerCase()) 
+                    ) {
+                    listaFiltrada[i] = rows[i]
+                }
+            }
+            setFilteredRows(listaFiltrada)
+        } else {
+            setFilteredRows(rows)
+        }
+    }
 
     return(
         <>
@@ -83,15 +103,10 @@ const MenuComponent = () => {
                     </Menu>
                 </Stack>
                 <div className="busqueda-container">
-                    <Input bg='white' placeholder="Buscar viaje..."></Input>
-                </div>
-                <div className="origendestino-container">
-                    <p className="origin">Origen</p>
-                    <div className="line"></div>
-                    <p className="destiny">Destino</p>
+                    <Input ref={inputRef} bg='white' placeholder="Buscar viaje..." onChange={buscarViaje}></Input>
                 </div>
                 <div className="grilla-container">
-                    <GrillaComponent columns={columns} rows={rows}></GrillaComponent>    
+                    <GrillaComponent columns={columns} rows={filteredRows}></GrillaComponent>    
                 </div>
             </div>
         </>

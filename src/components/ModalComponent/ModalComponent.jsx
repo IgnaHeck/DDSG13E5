@@ -10,12 +10,15 @@ export default function ModalComponent(props) {
     const cancelButton = props.cancelButton;
     const modalBody = props.modalBody;
     var isDisabled = props.isDisabled || false;
-    const disableAfterAtion = props.disableAfterAtion;
+    var disableAfterAction = props.disableAfterAction || false;
+    var disableIfCondition = props.disableIfCondition || false;
     const onActionClick = props.onActionClick;
     const title = props.title;
     const aceptarButtonColor = props.aceptarButton || 'blue'
     const cancelarButtonColor = props.cancelarButton || 'blue'
     const [isOpen, setOpen] = useState(false);
+    const [isDisabledState, setDisabled ] = useState(isDisabled);
+
 
     const handleOnClick = () => {
         if(!isOpen) {
@@ -26,20 +29,24 @@ export default function ModalComponent(props) {
     }
 
     const handleOnActionClick = () => {
+        console.log("HANDLE ON CLICK")
+        console.log("Disable after action?",disableAfterAction)
         onActionClick(data);
         if(!isOpen) {
             setOpen(true)
         } else {
             setOpen(false)
         }
-        if(disableAfterAtion){
-            isDisabled = true
+        if(disableAfterAction){
+            setDisabled(true)
+            console.log("Estado del boton:", isDisabledState)
         }
     }
 
+
      return (
         <>
-        <Button isDisabled={isDisabled} mx={1} mt={0} onClick={handleOnClick}>
+        <Button isDisabled={isDisabledState || disableIfCondition} mx={1} mt={0} onClick={handleOnClick}>
             {text}
         </Button>
         <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={handleOnClick}>
