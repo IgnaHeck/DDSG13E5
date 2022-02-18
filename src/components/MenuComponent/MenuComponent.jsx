@@ -88,7 +88,7 @@ const MenuComponent = () => {
             >'Subi que te llevo'</Text>
                 <Stack spacing={3} direction='row' aling='center'>
                     <a href="/viajes"><Button>Tus Viajes</Button></a>
-                    <a href="/modificar-viaje"><Button>Programar Viaje</Button></a>
+                    <a href="/crear-viaje"><Button>Programar Viaje</Button></a>
                     <a href="/vehiculos"><Button>Tus Vehiculos</Button></a>
                     <a href="/nuevo-vehiculo"><Button>Agregar Vehiculo</Button></a>
                     <Menu>
