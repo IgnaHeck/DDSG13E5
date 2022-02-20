@@ -1,8 +1,12 @@
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Como ejecutar el proyecto
 
 ## Available Scripts
+
+1_ `git pull` para bajar el proyecto.
+
+2_ `npm install` para instalar las dependencias de React.
+
+3_ `npm start` para encender un servidor local en la direccion [http://localhost:3000](http://localhost:3000)
 
 In the project directory, you can run:
 
