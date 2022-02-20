@@ -19,7 +19,7 @@ import {
 
 const ModificarViajeComponent = () => {
     // Storage functions
-    const { getVehiculo, getVehiculos, insertViaje, insertDireccion, getDirecciones, getViaje } = useStorage();
+    const { getVehiculo, getVehiculos, updateViaje, insertDireccion, getDirecciones, getViaje } = useStorage();
     // Ref declarations
     const provinciaORef = useRef();
     const provinciaDRef = useRef();
@@ -47,14 +47,14 @@ const ModificarViajeComponent = () => {
     const [ isDisabled, setDisabled ] = useState(true);
     const [ conductorID, setConductorID ] = useState(null);
     const [ direcciones, setDirecciones ] = useState([]);
-    const [ provinciaSelectedID, setProvinciaSelectedID ] = useState(0);
+    const [ origenDestinoID, setOrigenDestinoID] = useState([]);
 
     const { id } = useParams();
 
     const handleOnClick = () => {
         setClicked(!isClicked);
-        setVehiculoSelected(vehiculoRef.current.value);
-        if(vehiculoRef.current.value === "" || localidadDRef.current.value === "" || localidadORef.current.value === "" ){
+        setVehiculoSelected(vehiculoRef.current.selectedIndex);
+        if(vehiculoRef.current.selectedIndex === 0 || localidadDRef.current.selectedIndex === 0 || localidadORef.current.selectedIndex === 0){
             setCapacity(1);
             setDisabled(true);
         } else {
@@ -75,7 +75,6 @@ const ModificarViajeComponent = () => {
         })
 
         getVehiculo(vehiculoSelected).then((vehiculoUnico) => {
-            console.log("AAAA",vehiculoUnico[0].equipaje)
             setChecked(vehiculoUnico[0].equipaje);
             setCapacity(vehiculoUnico[0].capacidadMaxima);
             setConductorID(vehiculoUnico[0].propietarioID)
@@ -92,24 +91,6 @@ const ModificarViajeComponent = () => {
         })
     },[]);
 
-    // useEffect(()=>{
-    //     getViaje(id).then((viaje)=> {
-    //         setProvinciaSelectedID(viaje[0].DireccionOrigen.Localidad.Provincia.id)
-    //         console.log("A:",viaje[0].DireccionOrigen.Localidad.Provincia.id)
-    //             provinciaORef.current.selectedIndex = viaje[0].DireccionOrigen.Localidad.Provincia.id
-    //             provinciaDRef.current.selectedIndex = viaje[0].DireccionDestino.Localidad.Provincia.id
-    //             localidadORef.current.selectedIndex = viaje[0].DireccionOrigen.Localidad.id
-    //             localidadDRef.current.selectedIndex = viaje[0].DireccionDestino.Localidad.id
-    //             calleORef.current.attributes[0].value = viaje[0].DireccionOrigen.calle
-    //             calleDRef.current.attributes[0].value = viaje[0].DireccionDestino.calle
-    //             alturaORef.current.attributes[0].value = viaje[0].DireccionOrigen.altura
-    //             alturaDRef.current.attributes[0].value = viaje[0].DireccionDestino.altura
-    //             vehiculoRef.current.value = viaje[0].Vehiculo.id
-    //             capacidadMaximaRef.current.value = viaje[0].espacioDefinido
-    //             precioRef.current.value = viaje[0].precio
-    //             observacionRef.current.value = viaje[0].observacion
-    //         })
-    // },[]);
 
     const optionsVehiculos = []
     for (let i = 0; i < vehiculos.length; i++) {
@@ -121,14 +102,14 @@ const ModificarViajeComponent = () => {
         if(isChecked){
             equipajeRef.current.checked = false
         }
-
-        const localidadOrigen = localidadORef.current.value
-        const localidadDestino = localidadDRef.current.value
+        const localidadOrigen = localidadORef.current.selectedIndex
+        const localidadDestino = localidadDRef.current.selectedIndex
+        console.log("Localidad origen y destino",localidadOrigen, localidadDestino)
         const calleOrigen = calleORef.current.value
         const calleDestino = calleDRef.current.value
         const alturaOrigen = alturaORef.current.value
         const alturaDestino = alturaDRef.current.value
-        const vehiculoID = parseInt(vehiculoRef.current.value)
+        const vehiculoID = parseInt(vehiculoRef.current.selectedIndex)
         const capacidadMaxima = parseInt(capacidadMaximaRef.current.value)
         const precioDefinido = parseFloat(precioRef.current.value)
         var equipaje = 0
@@ -139,27 +120,30 @@ const ModificarViajeComponent = () => {
         }
         const observacion = observacionRef.current.value
         
-        insertDireccion(alturaOrigen, calleOrigen, localidadOrigen)
-        insertDireccion(alturaDestino, calleDestino, localidadDestino)
+        var p1 = insertDireccion(alturaOrigen, calleOrigen, localidadOrigen)
+        var p2 = insertDireccion(alturaDestino, calleDestino, localidadDestino)
 
-        var origennID = direcciones[1] + 2
-        console.log(origennID)
-        var destinnoID = direcciones[0] + 2
-        setTimeout(saveFunction, 1000, precioDefinido, observacion, capacidadMaxima, equipaje, origennID, destinnoID, vehiculoID, conductorID)
+        Promise.all([p1, p2]).then(values => {
+            var origenID = values[0][0].id
+            var destinoID = values[1][0].id
+            setTimeout(saveFunction, 10, precioDefinido, observacion, capacidadMaxima, equipaje, origenID, destinoID, vehiculoID, conductorID)
+        })
+        
     }
     
     const saveFunction = (precioDefinido, observacion, capacidadMaxima, equipaje, origenID, destinoID, vehiculoID, conductorID) => {
-        insertViaje(precioDefinido, observacion, 'Programado', capacidadMaxima, equipaje, origenID, destinoID, vehiculoID, conductorID)
-        formRef.current.reset()
+        updateViaje(id, precioDefinido, observacion, 'Programado', capacidadMaxima, equipaje, origenID, destinoID, vehiculoID, conductorID)
+        console.log(id, precioDefinido, observacion, 'Programado', capacidadMaxima, equipaje, origenID, destinoID, vehiculoID, conductorID)
+        // formRef.current.reset()
     }
 
     return(
         <>
             <form ref={formRef} onSubmit={handleSave} className='modificar-viaje-container'>
                 <span className='span-container'>Origen:</span>
-                <InputsComponent provinciaSelectedState={provinciaSelectedID} sentido="Origen" calleRef={calleORef} alturaRef={alturaORef} canSave={setCanSave}/>
+                <InputsComponent sentido="Origen" provinciaRef={provinciaORef} localidadRef={localidadORef} calleRef={calleORef} alturaRef={alturaORef} canSave={setCanSave}/>
                 <span className='span-container'>Destino:</span>
-                <InputsComponent sentido="Destino" calleRef={calleDRef} alturaRef={alturaDRef}/>
+                <InputsComponent sentido="Destino" provinciaRef={provinciaDRef} localidadRef={localidadDRef} calleRef={calleDRef} alturaRef={alturaDRef}/>
                 <ColoredLine color='gray' height='2px'/>
                 <div className='segunda-parte'>
                     <p className='parrafo-2'>Vehiculo:</p>
